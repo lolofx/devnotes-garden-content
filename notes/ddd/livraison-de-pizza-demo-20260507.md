@@ -1,10 +1,10 @@
 ---
-title: Introduction au DDD
-slug: introduction-ddd
-tags: [ddd, architecture]
-created: "2026-04-28"
-updated: "2026-04-28"
-summary: Les concepts fondamentaux du Domain-Driven Design — agrégats, entités, value objects et bounded contexts.
+title: test extract event-stormer
+slug: livraison-de-pizza-demo-20260507
+tags: [ddd, event-storming]
+created: "2026-05-08"
+updated: "2026-05-08"
+summary: Test.
 draft: false
 ---
 
