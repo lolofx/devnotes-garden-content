@@ -118,4 +118,4 @@ Respecter cette convention, c'est pouvoir partager un Event Storming avec n'impo
 
 ---
 
-*Note liée : [BFF & Clean Architecture](./bff-clean-archi) — comment cet Event Storming se traduit en code côté backend et frontend.*
+*Note liée : [BFF & Clean Architecture](../bff/bff-clean-archi) — comment cet Event Storming se traduit en code côté backend et frontend.*

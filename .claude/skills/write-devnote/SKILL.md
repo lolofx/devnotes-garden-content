@@ -105,17 +105,19 @@ Bloc custom rendu par l'app pour représenter un Event Storming textuel. Types v
 
 ## Footer "Note liée"
 
-Toujours au singulier, en italique, avec le chemin relatif :
+Toujours en italique, chemin relatif **sans extension `.md`** — l'app utilise le slug pour la navigation :
 
 ```markdown
 *Note liée : [Titre de la note](../categorie/slug) — une phrase d'accroche.*
 ```
 
-Si plusieurs liens sont pertinents, les séparer par un point :
+Si plusieurs liens :
 
 ```markdown
 *Notes liées : [Note A](../cat/slug-a) — accroche. [Note B](../cat/slug-b) — accroche.*
 ```
+
+**Jamais** `../categorie/slug.md` — l'app ne saura pas naviguer.
 
 ## Erreurs fréquentes
 
@@ -126,4 +128,5 @@ Si plusieurs liens sont pertinents, les séparer par un point :
 | Date entre guillemets : `created: "2026-05-29"` | Sans guillemets : `created: 2026-05-29` |
 | "Notes liées" pour un seul lien | "Note liée" au singulier |
 | Nom de fichier ≠ slug | `notes/ddd/introduction-ddd.md` pour `slug: introduction-ddd` |
+| Lien avec extension : `(../bff/bff-clean-archi.md)` | Sans extension : `(../bff/bff-clean-archi)` |
 | Créer `notes/architecture/cqrs.md` pour un concept DDD | CQRS va dans `notes/ddd/` ou un nouveau `notes/cqrs/` |

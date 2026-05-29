@@ -139,4 +139,4 @@ Ces fichiers ne doivent pas être modifiés manuellement.
 - Les `tags` sont en minuscules, sans accents.
 - Le `slug` ne contient que des lettres minuscules, chiffres et tirets.
 - Mettre `draft: true` pour travailler une note sans la publier.
-- Terminer les notes avec une ligne *Note liée :* pointant vers une note connexe quand c'est pertinent.
+- Terminer les notes avec une ligne *Note liée :* pointant vers une note connexe quand c'est pertinent. Le chemin doit être **sans extension `.md`** : `(../categorie/slug)` — l'app utilise le slug pour la navigation.

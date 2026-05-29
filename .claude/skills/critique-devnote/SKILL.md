@@ -22,7 +22,7 @@ Vérifie point par point, signale tout écart :
 | **Dates** | Format `YYYY-MM-DD` sans guillemets |
 | **draft** | `true` = brouillon, `false` = publié — est-ce intentionnel ? |
 | **H1** | Première ligne du corps, identique au `title` |
-| **Footer** | Présence d'un *Note liée :* ou *Notes liées :* pointant vers des notes connexes. Singulier si 1 lien, pluriel si 2+. Italique. |
+| **Footer** | Présence d'un *Note liée :* ou *Notes liées :* pointant vers des notes connexes. Singulier si 1 lien, pluriel si 2+. Italique. **Chemin sans `.md`** — `(../cat/slug)` et non `(../cat/slug.md)`, sinon l'app ne navigue pas. |
 | **Structure** | Suit le template : intro → problème résolu → développement → limites → "Pour aller plus loin" → footer |
 | **Diagrammes** | Un bloc `mermaid` est-il manquant là où il éclairerait l'architecture ? Un bloc `event-storming` est-il utilisable pour les concepts d'Event Storming ? |
 | **Langue** | Français, tu, ton pédagogique |
