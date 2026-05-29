@@ -5,7 +5,7 @@ tags: [event-storming, ddd, workshop, modeling]
 created: 2026-04-17
 updated: 2026-04-17
 summary: "Comprendre les post-it de l'Event Storming : à quoi sert chaque couleur, quand l'utiliser, et comment lire un tableau de bout en bout."
-draft: true
+draft: false
 ---
 
 # Event Storming — Le code couleur expliqué

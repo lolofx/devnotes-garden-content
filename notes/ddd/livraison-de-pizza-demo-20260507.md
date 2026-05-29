@@ -15,7 +15,7 @@ draft: false
 ## Vue d'ensemble
 
 ```mermaid
-flowchart LR
+flowchart RL
     classDef event fill:#FF9900,stroke:#B36B00,color:#000
     classDef command fill:#4A90E2,stroke:#2E5C8A,color:#fff
     classDef actor fill:#FFEB3B,stroke:#B8A82A,color:#000
