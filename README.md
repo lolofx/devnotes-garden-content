@@ -6,6 +6,26 @@ Tout push sur `main` déclenche automatiquement le rebuild de l'app via un `repo
 
 ---
 
+## Setup (après un clone)
+
+Les skills embarqués dans `.claude/skills/` sont disponibles automatiquement via le repo.
+Les skills communautaires (.NET, DDD, Clean Architecture) nécessitent une installation globale :
+
+```bash
+bash .claude/install-skills.sh
+```
+
+Ré-exécuter la même commande pour les mettre à jour.
+
+| Skill | Type | Description |
+|-------|------|-------------|
+| `write-devnote` | Repo | Conventions de rédaction des notes |
+| `critique-devnote` | Repo | Critique structurée d'une note (forme + fond) |
+| `clean-ddd-hexagonal` | Global | Référence DDD / Clean Architecture / Hexagonal |
+| `milan-jovanovic-blog` | Global | Patterns .NET concrets (CQRS, EF Core, ASP.NET Core) |
+
+---
+
 ## Structure
 
 ```
