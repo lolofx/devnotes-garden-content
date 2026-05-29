@@ -5,7 +5,7 @@ tags: [cqrs, architecture, ddd, clean-architecture]
 created: 2026-05-29
 updated: 2026-05-29
 summary: "Ce que CQRS change concrètement dans ton architecture : séparer les lectures des écritures pour mieux scaler, tester et évoluer."
-draft: true
+draft: false
 ---
 
 # Introduction au CQRS
@@ -18,7 +18,7 @@ Le problème que CQRS résout est simple : un service applicatif classique accum
 
 En CQRS, une opération ne peut pas à la fois modifier l'état **et** retourner une valeur métier.
 
-- Une **Command** exprime une intention : `PasserCommande`, `AnnulerCommande`, `ChangerAdresseLivraison`. Elle retourne uniquement un statut de succès/échec (ou l'identifiant de la ressource créée).
+- Une **Command** exprime une intention : `PasserCommande`, `AnnulerCommande`, `ChangerAdresseLivraison`. Au sens strict du CQS de Meyer, elle ne retourne aucune valeur métier. En pratique, CQRS tolère le retour d'un **identifiant technique** (celui de la ressource créée) ou d'un statut succès/échec — ce qu'elle ne fait jamais, c'est retourner des données de lecture.
 - Une **Query** interroge l'état actuel : `GetCommandeById`, `ListCommandesEnCours`. Elle ne modifie jamais rien.
 
 ```mermaid
@@ -29,8 +29,8 @@ graph LR
   CommandBus --> CommandHandler
   QueryBus --> QueryHandler
 
-  CommandHandler -->|écrit| WriteModel[Write Model\nAgrégats / Domain]
-  QueryHandler -->|lit| ReadModel[Read Model\nProjections / DTO]
+  CommandHandler -->|écrit| WriteModel[Write Model<br/>Agrégats / Domain]
+  QueryHandler -->|lit| ReadModel[Read Model<br/>Projections / DTO]
 
   WriteModel -.->|publie un event| ReadModel
 ```
@@ -47,13 +47,15 @@ public record PasserCommandeCommand(
     IReadOnlyList<LigneCommandeDto> Lignes
 );
 
-public class PasserCommandeHandler : ICommandHandler<PasserCommandeCommand>
+public class PasserCommandeHandler : ICommandHandler<PasserCommandeCommand, Guid>
 {
-    public async Task HandleAsync(PasserCommandeCommand command, CancellationToken ct)
+    public async Task<Guid> HandleAsync(PasserCommandeCommand command, CancellationToken ct)
     {
         var client = await _clientRepository.GetAsync(command.ClientId, ct);
         var commande = Commande.Passer(client, command.Lignes);
         await _commandeRepository.SaveAsync(commande, ct);
+
+        return commande.Id; // identifiant technique, pas une donnée de lecture
     }
 }
 ```

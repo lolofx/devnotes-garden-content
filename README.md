@@ -50,9 +50,11 @@ tags: [tag1, tag2, tag3]
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 summary: "Une phrase qui décrit la note — affichée dans les cards de l'app."
-draft: false
+draft: true
 ---
 ```
+
+> Toute note démarre en `draft: true`. Elle ne passe en `draft: false` qu'après une passe `critique-devnote` et quand elle permet un apprentissage autonome.
 
 | Champ | Type | Description |
 |-------|------|-------------|
@@ -83,7 +85,7 @@ tags: [cqrs, architecture, ddd]
 created: 2026-05-29
 updated: 2026-05-29
 summary: "Séparer les chemins de lecture et d'écriture pour simplifier les modèles complexes."
-draft: false
+draft: true
 ---
 
 # Introduction au CQRS
@@ -101,25 +103,18 @@ Le **Command Query Responsibility Segregation** (CQRS) consiste à séparer...
 
 ---
 
-## Notes auto-générées (EventStormer)
+## Notes issues d'EventStormer
 
-Les exports de l'app EventStormer produisent des fichiers sans frontmatter YAML. Leur format est fixe :
+L'app [EventStormer](https://github.com/lolofx/event-stormer-app) exporte un atelier en Markdown + Mermaid (diagramme coloré + listes de stickies par type). Ces exports **ne sont pas publiés bruts** : on les intègre dans une note standard du garden, comme n'importe quelle autre note.
 
-```markdown
-# Workshop : <nom> — Export Event Storming
+Convention pour intégrer un export :
 
-> Niveau : <niveau> | Exporté le <date> | <n> stickies
+1. Ajouter le **frontmatter** complet (`title`, `slug`, `tags`, dates, `summary`, `draft: true`).
+2. H1 descriptif identique au `title` ; conserver le bloc `> Niveau … | Exporté le … | N stickies` juste sous l'intro.
+3. Encadrer l'export d'une **introduction** (ce qu'on regarde) et d'une **lecture commentée** (comment décoder le mur), plus une section *Limites*.
+4. Terminer par un footer *Note liée :* vers la note théorique correspondante.
 
-## Vue d'ensemble
-```mermaid
-...
-```
-
-## Chronologie des domain events
-...
-```
-
-Ces fichiers ne doivent pas être modifiés manuellement.
+Voir `notes/event-storming/livraison-pizza-event-storming.md` comme modèle. Le diagramme Mermaid et les listes de l'export, eux, ne se réécrivent pas à la main.
 
 ---
 
@@ -129,13 +124,15 @@ Ces fichiers ne doivent pas être modifiés manuellement.
 |---------|-----------------|
 | `ddd/` | DDD, agrégats, value objects, bounded contexts |
 | `event-storming/` | Ateliers, code couleur, niveaux Big Picture / Process / Design |
-| `bff/` | Backend For Frontend, Clean Architecture |
+| `bff/` | Backend For Frontend, Clean Architecture, SignalR |
+| `cqrs/` | Command Query Responsibility Segregation, read/write models |
 
 ---
 
 ## Conventions
 
 - Une note = un concept. Préférer plusieurs notes courtes et liées plutôt qu'une seule note longue.
+- Ne pas passer une note en `draft: false` sans une passe `critique-devnote` (forme + fond).
 - Les `tags` sont en minuscules, sans accents.
 - Le `slug` ne contient que des lettres minuscules, chiffres et tirets.
 - Mettre `draft: true` pour travailler une note sans la publier.

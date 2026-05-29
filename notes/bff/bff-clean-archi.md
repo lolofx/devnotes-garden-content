@@ -200,4 +200,4 @@ Le BFF brille quand tu as au moins deux clients différents, ou quand ton API m�
 
 ---
 
-*Note liée : [Event Storming — Le code couleur expliqué](./event-storming-color-code) — comment modéliser le domaine avant de décider où placer la logique.*
+*Note liée : [Event Storming — Le code couleur expliqué](../event-storming/event-storming-color-code) — comment modéliser le domaine avant de décider où placer la logique.*

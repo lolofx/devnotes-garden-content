@@ -3,9 +3,8 @@ title: "BFF, SignalR et Gateway — Arbitrages d'architecture"
 slug: bff-signalr-gateway-arbitrage
 tags: [bff, signalr, websocket, gateway, apim, architecture, dotnet, angular]
 created: 2026-05-12
-updated: 2026-05-12
-summary: "Quand utiliser un BFF quand on a déjà une API Gateway, et comment intégrer SignalR sans tomber dans le god-service. 
-Arbitrages concrets et architectures cibles."
+updated: 2026-05-29
+summary: "Quand utiliser un BFF quand on a déjà une API Gateway, et comment intégrer SignalR sans tomber dans le god-service — arbitrages concrets et architectures cibles."
 draft: false
 ---
 
@@ -141,6 +140,8 @@ public sealed record RealtimeEvent<TPayload>(
 - Redis backplane obligatoire dès qu'on scale horizontalement
 - Couche de plus à exploiter
 - Contrat d'événements à maintenir entre APIs et Realtime Service
+
+> Sur stack Azure, **Azure SignalR Service** (mode *Default* ou *Serverless*) remplace le backplane Redis que tu gères toi-même : il prend en charge la fan-out des connexions WebSocket et le scale-out, ce qui réduit l'exploitation à la charge du service Realtime. C'est souvent le choix par défaut quand on est déjà sur Azure.
 
 ### Option C — Hub via APIM (WebSocket passthrough)
 
