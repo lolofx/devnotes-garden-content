@@ -17,16 +17,16 @@ Clean Architecture (Robert C. Martin) et Architecture Hexagonale / Ports & Adapt
 **Les dépendances pointent vers l'intérieur.** Le code externe connaît le code interne ; jamais l'inverse. Le Domaine ne sait pas qu'une base de données existe.
 
 ```
-┌─────────────────────────────────────────────┐
-│  Infrastructure (DB, HTTP, clients tiers…)  │  ← détails, jetables
-│   ┌───────────────────────────────────────┐ │
-│   │  Application (Use Cases)              │ │  ← orchestration
-│   │   ┌─────────────────────────────────┐ │ │
-│   │   │  Domaine                        │ │ │  ← règles métier pures
-│   │   │  Aggregates, Entities, VOs      │ │ │
-│   │   └─────────────────────────────────┘ │ │
-│   └───────────────────────────────────────┘ │
-└─────────────────────────────────────────────┘
+┌────────────────────────────────────────────────┐
+│  Infrastructure (DB, HTTP, clients tiers…)     │  ← détails, jetables
+│   ┌──────────────────────────────────────────┐ │
+│   │  Application (Use Cases)                 │ │  ← orchestration
+│   │   ┌────────────────────────────────────┐ │ │
+│   │   │  Domaine                           │ │ │  ← règles métier pures
+│   │   │  Aggregates, Entities, VOs         │ │ │
+│   │   └────────────────────────────────────┘ │ │
+│   └──────────────────────────────────────────┘ │
+└────────────────────────────────────────────────┘
          les flèches de dépendance pointent  →  vers le centre
 ```
 

@@ -2,7 +2,7 @@
 title: "Introduction au CQRS"
 slug: introduction-cqrs
 tags: [cqrs, architecture, ddd, clean-architecture]
-created: 2026-05-29
+created: 2025-09-01
 updated: 2026-05-29
 summary: "Ce que CQRS change concrètement dans ton architecture : séparer les lectures des écritures pour mieux scaler, tester et évoluer."
 draft: false
