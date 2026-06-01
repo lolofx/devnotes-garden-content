@@ -177,4 +177,4 @@ CQRS est pertinent quand :
 
 ---
 
-*Notes liées : [Backend For Frontend & Clean Architecture](../bff/bff-clean-archi) — comment le BFF orchestre les Queries exposées par plusieurs contextes. [Introduction au DDD](../ddd/introduction-ddd) — les agrégats au cœur du Write Model CQRS.*
+*Notes liées : [Backend For Frontend & Clean Architecture](../bff/bff-clean-archi) — comment le BFF orchestre les Queries exposées par plusieurs contextes. [Introduction au DDD](../ddd/introduction-ddd) — les agrégats au cœur du Write Model CQRS. [Composer un dashboard multi-contexte](../cqrs/composition-multi-contexte) — fan-out vs projection quand plusieurs bounded contexts alimentent un même écran.*

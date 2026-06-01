@@ -124,4 +124,4 @@ Le bon réflexe : faire du **DDD stratégique** (langage, bounded contexts) pres
 
 ---
 
-*Notes liées : [Event Storming — Le code couleur expliqué](../event-storming/event-storming-color-code) — modéliser un domaine en atelier avant de coder. [Introduction au CQRS](../cqrs/introduction-cqrs) — comment les agrégats deviennent le Write Model.*
+*Notes liées : [Event Storming — Le code couleur expliqué](../event-storming/event-storming-color-code) — modéliser un domaine en atelier avant de coder. [Introduction au CQRS](../cqrs/introduction-cqrs) — comment les agrégats deviennent le Write Model. [Events de domaine vs Events d'intégration](../ddd/integration-events-vs-domain-events) — ce que les agrégats publient et comment ça traverse les bounded contexts. [Architecture Hexagonale — Ports & Adapters](../hexagonal/ports-et-adapters) — comment isoler le Domain des détails techniques.*
