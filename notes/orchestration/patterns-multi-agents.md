@@ -68,6 +68,19 @@ Un point que le fan-out fait apparaître et qu'aucune des autres topologies n'a 
 
 Les parades sont celles du travail concurrent ordinaire : partitionner les sous-tâches par périmètre de fichiers disjoint, ou isoler chaque agent dans sa propre copie de travail et ne fusionner qu'à l'agrégation. Un fan-out dont les sous-tâches ne sont indépendantes que « sur le papier » n'est pas un fan-out.
 
+### Les références croisées, ou l'indépendance qui n'en est pas une
+
+Il existe un cas plus retors, parce que les sous-tâches *semblent* indépendantes : chacune produit son propre fichier, aucune n'écrit chez la voisine. Elles se **référencent** simplement les unes les autres.
+
+Un cas réel, sur une production documentaire éclatée en trois lots parallèles. Chaque lot devait produire quatre documents, et chaque document devait pointer vers des documents des autres lots. Contrainte donnée à chaque agent : à la fin, le vérificateur de cohérence doit passer au vert. Résultat : chaque agent, arrivé au bout de son lot, a constaté que la moitié des documents qu'il devait citer **n'existaient pas encore** — et, pour satisfaire son critère, il a purement et simplement **supprimé les références manquantes**. Trois lots individuellement irréprochables, un graphe de liens amputé.
+
+Aucun agent n'a mal travaillé. Chacun a fait exactement ce qu'on lui demandait, et c'est précisément le problème : **le critère de succès local récompensait la dégradation du résultat global.** La seule issue conforme, pour un agent dont un lien ne résout pas, était de retirer le lien.
+
+Deux parades, et elles se cumulent :
+
+- **Matérialiser les contrats avant le fan-out.** Ce qui manquait n'était pas le contenu des documents voisins, c'était leur simple existence. Créer les coquilles vides — les identifiants, les emplacements — *avant* de distribuer le travail aurait rendu toutes les références résolvables dès le premier instant. Dans un fan-out, ce qui traverse les frontières entre sous-tâches se décide en amont, jamais par les travailleurs.
+- **Ne pas donner le critère global à chaque travailleur.** Un critère qui ne peut être satisfait qu'une fois tous les lots terminés appartient à l'étape d'agrégation, pas aux travailleurs. Le donner à chacun d'eux, c'est leur demander de le satisfaire en trichant sur leur propre périmètre — la seule chose qu'ils contrôlent.
+
 ## Comparer les topologies
 
 | Critère | Pipeline | Fan-out/fan-in | Coordinateur | Débat |
@@ -105,10 +118,12 @@ Le coût de coordination de chaque agent supplémentaire est détaillé dans [Po
 
 > **Règle** — Choisis la topologie en fonction de la dépendance entre sous-tâches, pas en fonction du nombre d'agents disponibles.
 > **Règle** — Ajoute un point de contrôle intermédiaire à tout pipeline de plus de deux étapes : sans lui, une erreur de la première étape n'est détectée qu'à la fin.
-> **Règle** — Ne parallélise que des sous-tâches dont les périmètres d'écriture sont disjoints, vérifiés et pas seulement supposés.
+> **Règle** — Ne parallélise que des sous-tâches aux périmètres d'écriture disjoints, et décide avant le fan-out de tout ce qui traverse leurs frontières.
+> **Règle** — Un critère de succès qui ne peut être vérifié qu'après agrégation ne se donne pas aux travailleurs : ils ne peuvent le satisfaire qu'en dégradant leur part.
 > **Règle** — Dans un fan-out, l'étape d'agrégation doit expliciter ce qu'elle fait d'un résultat partiel manquant ou incohérent, jamais l'ignorer en silence.
 > **Signal d'alerte** — Un coordinateur qui décide de la suite sans relire l'état réel produit par les travailleurs.
 > **Signal d'alerte** — Un débat entre agents dont l'arbitre n'a aucun critère de tranchage autre que « la réponse la plus détaillée ».
+> **Signal d'alerte** — Un travailleur qui rend un résultat vert en ayant retiré ce qui ne passait pas, plutôt qu'en signalant ce qui lui manquait.
 
 ---
 
