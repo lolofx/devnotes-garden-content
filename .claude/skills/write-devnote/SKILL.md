@@ -116,7 +116,7 @@ verified: 2026-08-23     # forme recette uniquement
 |-------|------|
 | `pillar` | `craft` ou `ai`. La facette de plus haut niveau du garden |
 | `level` | `fondation` (aucun prérequis) · `intermediaire` (suppose les fondations du domaine) · `avance` (arbitrage ou cas limite) |
-| `related` | La version **machine** du footer *Note liée* : la liste des slugs qui y sont cités, dans le même ordre. Les deux doivent toujours dire la même chose |
+| `related` | Le **graphe machine** de la note : tous les slugs du garden liés depuis le corps, footer compris. Le footer *Note liée* en est le sous-ensemble éditorial, celui qu'on met en avant pour un humain |
 | `verified` | Date du dernier contrôle de l'outillage décrit. **Obligatoire sur les recettes**, interdit ailleurs |
 
 Ces champs traversent le build tel quel jusqu'à `content-index.json` : ils sont immédiatement exploitables par un agent, même si l'app ne les affiche pas encore.
@@ -348,7 +348,7 @@ Les deux formes relatives sont valides. Le chemin doit **résoudre vers un fichi
 
 L'extension `.md` est une entorse à la convention, pas une casse : `rewriteNoteLinks` ne garde que le basename du lien et retire `.md` lui-même. On l'évite quand même, pour que tout le corpus se lise pareil.
 
-Et le champ `related` du frontmatter doit lister exactement ces slugs, dans le même ordre.
+Le champ `related` du frontmatter liste **tous** les slugs liés depuis le corps, footer compris — pas seulement ceux du footer. Le footer est la sélection éditoriale pour un lecteur humain ; `related` est le graphe complet pour une machine. L'audit vérifie les deux sens : un lien du corps absent de `related`, et un `related` déclaré sans lien dans le corps.
 
 ---
 
@@ -366,7 +366,7 @@ Et le champ `related` du frontmatter doit lister exactement ces slugs, dans le m
 | Tag `dotnet` parce que la note contient du C# | Le langage n'est pas un sujet — réserver `dotnet` aux notes sur .NET |
 | 1er tag ≠ nom du dossier | Le 1er tag ancre la note, il vaut le dossier |
 | 8 tags sur une note | 5 maximum, dont 1 de domaine |
-| `related` désynchronisé du footer | Les deux disent la même chose, ou aucun des deux n'est fiable |
+| Lien ajouté dans le corps sans mettre `related` à jour | `related` liste tous les liens du corps — l'audit le vérifie |
 | `verified` sur une note concept | Réservé à la forme recette |
 | Version d'outil dans une note concept | Les concepts ne datent pas — l'outillage va dans une recette |
 | Capsule « Pour un agent » absente | Obligatoire sur toute note passée en `draft: false` |

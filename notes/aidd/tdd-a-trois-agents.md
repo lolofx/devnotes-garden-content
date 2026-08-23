@@ -4,16 +4,16 @@ slug: tdd-a-trois-agents
 tags: [aidd, testing]
 created: 2026-08-23
 updated: 2026-08-23
-summary: "Séparer l'écriture des tests, l'implémentation et la review entre trois agents distincts rend la triche structurellement impossible, là où le TDD classique ne fait que la déconseiller."
+summary: "Séparer l'écriture des tests, l'implémentation et la review entre trois agents distincts déplace la triche du domaine de la discipline vers celui des permissions — à condition que la séparation soit techniquement appliquée, pas seulement demandée."
 draft: true
 pillar: ai
 level: intermediaire
-related: [roles-specialises, sdlc-pilote-par-ia, evaluer-un-agent, introduction-cqrs]
+related: [roles-specialises, sdlc-pilote-par-ia, evaluer-un-agent, outils-et-garde-fous, introduction-cqrs]
 ---
 
 # TDD à trois agents
 
-Le TDD classique — rouge, vert, refactor — repose sur une discipline : celui qui écrit le test résiste à la tentation de l'adapter à l'implémentation qu'il a déjà en tête. Cette discipline tient plus ou moins bien chez un développeur humain fatigué en fin de sprint. Elle ne tient pas du tout chez un agent, qui optimise par défaut pour « faire passer le test » — y compris en réécrivant le test si rien ne l'en empêche. Le TDD à trois agents ne demande pas plus de discipline : il rend la triche **structurellement** impossible en séparant les rôles sur trois agents qui n'ont pas accès aux mêmes informations ni aux mêmes fichiers.
+Le TDD classique — rouge, vert, refactor — repose sur une discipline : celui qui écrit le test résiste à la tentation de l'adapter à l'implémentation qu'il a déjà en tête. Cette discipline tient plus ou moins bien chez un développeur humain fatigué en fin de sprint. Elle ne tient pas du tout chez un agent, qui optimise par défaut pour « faire passer le test » — y compris en réécrivant le test si rien ne l'en empêche. Le TDD à trois agents ne demande pas plus de discipline : il déplace le problème hors du domaine de la volonté, en séparant les rôles sur trois agents qui n'ont pas accès aux mêmes informations ni aux mêmes fichiers.
 
 ## Le problème que résout la séparation des rôles
 
@@ -44,6 +44,14 @@ sequenceDiagram
 ```
 
 Le point clé du protocole : l'Implémenteur ne reçoit jamais l'autorisation de toucher au fichier de tests. Si un test lui semble faux, il ne le corrige pas — il l'escalade au Reviewer, seul habilité à renvoyer les tests au Scripteur.
+
+### Ce « jamais » doit être une permission, pas une consigne
+
+C'est le point sur lequel tout le protocole tient ou s'effondre. Si l'interdiction d'écrire dans le fichier de tests n'est qu'une phrase dans le prompt de l'Implémenteur, on retombe **exactement** dans le problème du premier paragraphe : une consigne qu'un agent optimisant pour « faire passer le test » finira par contourner, précisément parce que rien ne l'en empêche.
+
+La séparation ne vaut que si elle est appliquée par l'hôte : l'outil d'écriture de l'Implémenteur n'a pas le droit d'écrire sur le chemin des tests, et une tentative échoue au niveau du programme, pas au niveau du jugement du modèle. C'est la même distinction que pour les [garde-fous d'outils](../agents/outils-et-garde-fous) : un garde-fou se vérifie dans le code, jamais dans le prompt.
+
+Sans cette application technique, le TDD à trois agents reste utile — il rend la triche visible dans le diff et coûteuse à commettre — mais il ne la rend pas impossible. Annoncer l'inverse serait vendre la méthode au lieu de la décrire.
 
 ## Exemple concret
 

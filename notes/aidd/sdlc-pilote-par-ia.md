@@ -1,7 +1,7 @@
 ---
 title: "Un cycle de développement piloté par des agents"
 slug: sdlc-pilote-par-ia
-tags: [aidd, orchestration]
+tags: [aidd, evaluation]
 created: 2026-08-23
 updated: 2026-08-23
 summary: "Ce que change un développement piloté par des agents n'est pas la chaîne cadrer-planifier-implémenter-valider-reviewer-livrer, mais le coût relatif de chacune de ses étapes."
@@ -68,7 +68,9 @@ Le plan produit à l'étape 2 n'est pas un document jetable : c'est lui que l'ag
 
 ## Le plan comme langage ubiquitaire
 
-Ce rôle du plan a un nom en DDD : c'est le [langage ubiquitaire](../ddd/introduction-ddd) du chantier — le vocabulaire et les décisions sur lesquels humain et agents s'accordent *avant* que quiconque commence à taper du code. Un plan divergent entre agents produit exactement le dégât qu'un vocabulaire divergent entre équipes produit dans un modèle de domaine : chacun implémente sa propre idée de ce qui a été demandé, et les deux versions ne se recollent qu'au moment de la review — trop tard, trop cher.
+Le plan joue ici le rôle que le [langage ubiquitaire](../ddd/introduction-ddd) joue en DDD : la référence partagée qui empêche humain et agents de diverger sans s'en apercevoir. Un plan divergent entre agents produit exactement le dégât qu'un vocabulaire divergent entre équipes produit dans un modèle de domaine : chacun implémente sa propre idée de ce qui a été demandé, et les deux versions ne se recollent qu'au moment de la review — trop tard, trop cher.
+
+L'analogie a une limite qu'il faut poser tout de suite, sous peine de faire dire au DDD ce qu'il ne dit pas. Le langage ubiquitaire est **vivant** : il se construit et se révise en continu dans la conversation avec le métier, il n'est jamais figé. Le plan, lui, est un artefact **daté** : on l'écrit, on le valide, on l'exécute, on le confronte au diff. Le plan n'est donc pas le langage ubiquitaire du projet — c'est son instanciation ponctuelle pour un chantier donné. Ce qui se transfère, c'est le mécanisme : une référence explicite et partagée coûte moins cher que la reconstruction implicite que chacun ferait dans son coin.
 
 ## Limites
 
@@ -82,7 +84,7 @@ Sur une tâche de trois lignes — corriger une faute dans un message d'erreur �
 ## Pour un agent
 
 > **Règle** — Un agent implémente à partir d'un plan écrit et validé, jamais à partir du besoin brut directement.
-> **Règle** — Aucune étape ne saute la précédente : pas d'implémentation sans plan, pas de livraison sans review.
+> **Règle** — Une étape ne se saute pas en silence : on peut décider explicitement d'alléger le cycle sur une tâche triviale, jamais l'oublier en cours de route.
 > **Règle** — Toute décision irréversible ou tout arbitrage produit remonte à l'humain, quelle que soit l'étape où elle apparaît.
 > **Signal d'alerte** — Un agent qui livre un changement sans qu'aucun artefact de cadrage ou de plan n'existe en amont.
 > **Signal d'alerte** — Un plan qui change de sens entre l'étape « planifier » et l'étape « implémenter » sans que personne ne le retranscrive.

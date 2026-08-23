@@ -1,7 +1,7 @@
 ---
 title: "Outils et garde-fous"
 slug: outils-et-garde-fous
-tags: [agents, mcp, idempotence]
+tags: [agents, idempotence]
 pillar: ai
 level: intermediaire
 created: 2026-08-23
@@ -55,11 +55,15 @@ public async Task<ToolResult> DeleteFileAsync(string path, bool confirmed, Cance
 
 Le prompt peut orienter le comportement du modèle ; il ne doit jamais être la seule ligne de défense. Le garde-fou se vérifie à l'entrée de l'outil, exactement comme l'invariant se vérifie à l'entrée de l'aggregate root — jamais en confiance dans l'appelant.
 
+### Le dernier garde-fou est l'isolation
+
+Confirmation, dry-run et permissions filtrent *ce que l'agent a le droit de demander*. Ils ne disent rien de ce que fait le code une fois exécuté. Pour tout ce qui exécute du contenu généré — un script, une requête, une commande — le seul garde-fou qui tient est l'**isolation d'exécution** : un conteneur jetable, un système de fichiers restreint, un réseau coupé par défaut. Le raisonnement est le même que pour l'invariant : on ne compte pas sur le fait que le code produit soit inoffensif, on rend le périmètre incapable de causer un dégât hors de lui.
+
 ## L'idempotence des outils
 
 Un agent réessaie. Un appel d'outil peut timeout côté réseau sans que l'agent sache si l'effet a eu lieu ; le comportement naturel du modèle est alors de réessayer. Si l'outil n'est pas idempotent, ce réessai produit un doublon — deux emails envoyés, deux commandes créées, une facture payée deux fois.
 
-C'est le même problème que l'[Inbox Pattern](../messaging/inbox-pattern) résout côté messaging : un broker en at-least-once peut livrer deux fois le même message, et c'est au consommateur de garantir qu'un traitement dupliqué reste sans effet. Un outil d'agent est dans la même situation — le modèle est un appelant en "au moins une fois", jamais garanti "exactement une fois".
+C'est le même problème que l'[Inbox Pattern](../messaging/inbox-pattern) résout côté messaging : un broker en at-least-once peut livrer deux fois le même message, et c'est au consommateur de garantir qu'un traitement dupliqué reste sans effet. Un outil d'agent est dans une situation voisine, avec une nuance à ne pas gommer : un broker *garantit* l'at-least-once au niveau du protocole, alors qu'un modèle qui retente est un comportement **probable**, pas une garantie système — il peut aussi bien abandonner, ou supposer à tort que l'appel a réussi. La conclusion pratique est la même dans les deux cas : un outil à effet de bord ne doit jamais supposer qu'il ne sera appelé qu'une fois.
 
 ```yaml
 # Description d'outil pour le modèle — l'idempotence fait partie du contrat exposé
@@ -81,6 +85,11 @@ Un garde-fou a un coût : chaque confirmation demandée est un aller-retour qui 
 
 Réserve la friction (confirmation, dry-run) aux actions réellement irréversibles ou à fort impact. Pour tout le reste — lecture, calcul, action réversible — le garde-fou doit rester invisible en usage normal et ne se déclencher que sur un cas hors périmètre. Un agent entièrement sous confirmation n'est plus un agent, c'est un formulaire avec des étapes en plus.
 
+## Pour aller plus loin
+
+- La conception d'API idempotentes (clé d'idempotence, rejeu sûr) : la littérature des API de paiement s'applique presque telle quelle aux outils d'agent
+- Les principes du moindre privilège et de l'isolation d'exécution, transposés depuis la sécurité applicative classique
+
 ## Pour un agent
 
 > **Règle** — La description d'un outil est lue par le modèle pour décider : elle fait partie du code, pas de la documentation annexe.
@@ -89,6 +98,7 @@ Réserve la friction (confirmation, dry-run) aux actions réellement irréversib
 > **Règle** — Un outil qui produit un effet de bord doit être idempotent via une clé stable, pas supposé appelé une seule fois.
 > **Signal d'alerte** — Un garde-fou formulé uniquement comme une phrase dans le prompt système ("ne fais jamais X").
 > **Signal d'alerte** — Une confirmation exigée pour une action réversible sans conséquence réelle.
+> **Signal d'alerte** — Du contenu généré par le modèle exécuté directement dans l'environnement hôte, sans isolation.
 
 ---
 

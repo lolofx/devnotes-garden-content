@@ -23,7 +23,7 @@ Un agent qui vient de passer vingt minutes à explorer un bug a construit, dans 
 
 ## Le handoff est un contrat, pas un partage de mémoire
 
-Le raisonnement interne d'un agent est l'équivalent d'un [**domain event**](../ddd/integration-events-vs-domain-events) : privé, riche, produit en continu, et libre de changer de forme d'un tour à l'autre sans conséquence pour personne d'autre. Le handoff, lui, est l'équivalent d'un **integration event** : c'est ce qui traverse la frontière, donc ça doit être stable, minimal, et pensé comme un contrat — pas comme un extrait brut du monologue interne.
+Le raisonnement interne d'un agent est l'équivalent de l'**état interne d'un agrégat** — dont les [domain events](../ddd/integration-events-vs-domain-events) publiés en son sein sont la forme structurée : privé, riche, produit en continu, et libre de changer d'un tour à l'autre sans conséquence pour personne d'autre. Le handoff, lui, est l'équivalent d'un **integration event** : c'est ce qui traverse la frontière, donc ça doit être stable, minimal, et pensé comme un contrat — pas comme un extrait brut du monologue interne.
 
 Confondre les deux a exactement le même effet que côté bounded contexts : coller le raisonnement interne d'un agent dans le message transmis au suivant, c'est publier un détail d'implémentation comme s'il était un contrat. Le second agent devient couplé à des détails qui n'auraient jamais dû sortir du premier, et le premier ne peut plus changer sa façon de raisonner sans casser silencieusement ce que le second attend de lui. L'autonomie de chaque agent — comme celle d'un bounded context — dépend de cette séparation stricte entre ce qui se passe **dans** le contexte et ce qui **sort** vers l'extérieur.
 

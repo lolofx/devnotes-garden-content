@@ -23,7 +23,7 @@ Confondre les deux formes de mémoire disponibles — celle de la session en cou
 |---|---|---|
 | Support | La fenêtre de contexte de la session | Fichiers, base de données, notes écrites |
 | Durée de vie | La session en cours, et encore — elle se compacte | Traverse les sessions, les redémarrages, les agents |
-| Coût d'accès | Gratuit une fois chargée, mais chaque token compte dans le budget | Il faut un appel d'outil pour la lire ou l'écrire |
+| Coût d'accès | Accès direct, sans appel d'outil — mais **chaque tour retransmet et refacture l'intégralité du contexte** (le cache de prompt réduit ce coût, il ne l'annule pas) | Un appel d'outil pour lire ou écrire, puis rien tant qu'on n'y retouche pas |
 | Fiabilité | Se dégrade avec la longueur (dilution, compaction, troncature) | Fiable tant que le format reste lisible |
 
 La mémoire de travail n'est pas un espace de stockage : c'est l'état courant du raisonnement. Elle est censée être volatile. La confusion arrive quand on lui fait porter un rôle qui appartient à la mémoire persistante — se souvenir d'une décision prise il y a trois sessions, par exemple.
@@ -50,7 +50,7 @@ Trois familles de réponses, combinables :
 
 C'est là que la mémoire d'agent rejoint directement le [CQRS](../cqrs/introduction-cqrs) : une mémoire persistante bien conçue n'est pas un journal brut de tout ce qui s'est passé — c'est un **Read Model**. Elle est écrite dans l'intention de répondre efficacement à une question qu'on posera plus tard, pas pour reconstituer fidèlement le déroulé complet d'une session.
 
-Un journal brut (l'équivalent d'un Write Model exhaustif — chaque tour, chaque appel d'outil, chaque token) est complet mais inutilisable tel quel : le prochain agent qui le lit doit reparcourir tout l'historique pour en extraire ce qui compte, exactement comme une Query qui devrait rejouer tous les Domain Events pour répondre à "quel est le statut actuel de la commande ?". Une mémoire persistante utile fait le travail de projection à l'écriture, pas à la lecture :
+Un journal brut (l'équivalent d'un **Event Store** — chaque tour, chaque appel d'outil, conservés tels quels) est complet mais inutilisable tel quel : le prochain agent qui le lit doit reparcourir tout l'historique pour en extraire ce qui compte, exactement comme une Query qui devrait rejouer tous les Domain Events pour répondre à "quel est le statut actuel de la commande ?". Une mémoire persistante utile fait le travail de projection à l'écriture, pas à la lecture :
 
 ```markdown
 # progress.md — état du refactoring auth (projection, pas journal)
@@ -74,7 +74,13 @@ Ce fichier ne raconte pas ce qui s'est passé tour par tour — il répond direc
 
 - **Une mémoire périmée est pire qu'absente** — un fichier `progress.md` qui affirme qu'une étape est bloquée alors qu'elle a été résolue ailleurs conduit l'agent à perdre du temps, ou pire, à contredire un travail déjà fait. Une projection doit être mise à jour au même rythme que l'état qu'elle décrit, sinon elle ment avec assurance.
 - **Une mémoire ne compense pas une tâche mal cadrée** — si le problème lui-même est mal défini, se souvenir fidèlement des tentatives précédentes ne rend pas la prochaine tentative meilleure.
+- **Le contexte se contamine** — une erreur ou une hallucination produite tôt dans la session reste dans la fenêtre et se fait traiter comme un fait acquis aux tours suivants. Contrairement à une mémoire persistante, qu'on peut relire et corriger, un contexte contaminé ne se répare pas de l'intérieur : il faut repartir d'un contexte propre en ne réinjectant que l'état vérifiable.
 - **Une mémoire n'est pas un substitut à l'observation directe** — pour une donnée qui change vite (l'état réel d'un système, le contenu actuel d'un fichier), relire la source est plus fiable que de faire confiance à ce qu'une note en dit.
+
+## Pour aller plus loin
+
+- La littérature sur la génération augmentée par récupération (RAG) : le même arbitrage « tout charger » vs « aller chercher au moment utile »
+- Les travaux sur la dégradation d'attention en contexte long (« lost in the middle ») : pourquoi un contexte plus grand ne donne pas mécaniquement une meilleure réponse
 
 ## Pour un agent
 
@@ -83,6 +89,7 @@ Ce fichier ne raconte pas ce qui s'est passé tour par tour — il répond direc
 > **Règle** — Une mémoire persistante se met à jour au même rythme que l'état qu'elle décrit, sinon elle devient une source de désinformation.
 > **Signal d'alerte** — Un fichier de mémoire qui grossit sans jamais être réécrit ou élagué : il dérive vers le journal brut qu'il était censé éviter.
 > **Signal d'alerte** — Une décision critique qui n'existe que dans l'historique de conversation, jamais écrite ailleurs.
+> **Signal d'alerte** — Une session qui continue à raisonner sur une information dont on a établi entre-temps qu'elle était fausse.
 
 ---
 

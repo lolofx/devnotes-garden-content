@@ -1,7 +1,7 @@
 ---
 title: "Évaluer un agent"
 slug: evaluer-un-agent
-tags: [agents, evaluation, tdd]
+tags: [agents, evaluation]
 pillar: ai
 level: intermediaire
 created: 2026-08-23
@@ -56,7 +56,7 @@ Le choix par défaut : assertion partout où c'est possible, juge LLM seulement 
 
 ## Détecter les régressions — un prompt est un changement de code
 
-Voici l'erreur la plus répandue : traiter la modification d'un prompt, l'ajout d'un outil ou le changement de modèle sous-jacent comme une opération anodine, sans repasser par une vérification. C'est exactement le raisonnement qui protège un contrat entre [ports et adapters](../hexagonal/ports-et-adapters) : quand le contrat d'un port change, tous les adapters qui l'implémentent doivent être revérifiés, parce qu'un appelant qui faisait confiance à l'ancien comportement peut désormais recevoir autre chose. Un prompt, un outil ou un modèle sont le contrat sur lequel repose tout le comportement de l'agent — les modifier sans repasser la suite d'évaluation revient à changer une interface sans revérifier ses implémentations.
+Voici l'erreur la plus répandue : traiter la modification d'un prompt, l'ajout d'un outil ou le changement de modèle sous-jacent comme une opération anodine, sans repasser par une vérification. Les trois ne sont pourtant pas de même nature, et il vaut mieux le dire que de les mettre dans le même sac. Modifier le **schéma d'un outil**, c'est changer un contrat au sens strict — le [port](../hexagonal/ports-et-adapters) que le modèle voit change, et tout ce qui en dépend doit être revérifié. Changer de **modèle** ou reformuler un **prompt** ne touche aucun contrat : ça change la logique de décision elle-même, sans que rien dans la signature ne bouge. C'est précisément ce qui rend ces deux-là plus dangereux — un changement de contrat se voit dans un diff d'interface, une dérive de comportement ne se voit que dans une mesure.
 
 Une suite d'évaluation d'agent joue exactement le rôle d'une suite de tests de non-régression côté code : elle tourne à chaque changement de prompt, de modèle ou d'outil, et elle compare le taux de réussite avant/après sur le même jeu de cas. Une baisse mesurée déclenche l'investigation avant le déploiement, pas après.
 
@@ -66,6 +66,25 @@ Une suite d'évaluation d'agent joue exactement le rôle d'une suite de tests de
 - **Un jeu de cas figé vieillit** — il capture les cas connus au moment où il a été écrit, pas les nouveaux modes d'échec qui apparaissent avec l'usage réel. Il a besoin d'être enrichi, pas seulement rejoué.
 - **Certains critères de qualité résistent à toute formalisation** — le ton d'une réponse, sa pertinence dans un contexte relationnel avec l'utilisateur, ne se réduisent ni à une assertion ni fiablement à un juge LLM. Ces dimensions restent à la charge d'une revue humaine, périodique plutôt que systématique.
 
+## Un cas se rejoue, il ne se joue pas
+
+C'est le point qui manque le plus souvent, et il annule tout le reste s'il est oublié. Un agent est non déterministe : **une exécution ne prouve rien.** Un cas qui passe une fois peut échouer la suivante sans qu'une seule ligne n'ait changé, et un cas qui échoue une fois n'est pas nécessairement une régression.
+
+Un cas de test d'agent se rejoue donc N fois, et ce qu'on lit n'est pas un `pass` / `fail` mais un **taux de réussite** — 18 succès sur 20, par exemple. Une régression, c'est une baisse de ce taux entre deux versions, pas un échec isolé. Le N dépend de l'enjeu : 3 à 5 pour un signal grossier en développement, 20 et plus pour une décision de déploiement.
+
+Deux conséquences pratiques :
+
+- **Un seuil se fixe à l'avance.** « On déploie si le taux ne baisse pas de plus de 2 points » est une gate ; « le résultat a l'air stable » n'en est pas une.
+- **Le coût explose vite.** 50 cas × 20 exécutions, c'est 1000 appels par passage de suite. C'est ce qui force à garder le jeu de cas petit et discriminant plutôt que large et redondant.
+
+Corollaire moins connu : à force d'ajuster un prompt jusqu'à ce que la suite passe, on finit par optimiser pour la suite plutôt que pour la tâche. Un jeu de cas figé trop longtemps cesse de mesurer la qualité et se met à mesurer sa propre satisfaction.
+
+## Pour aller plus loin
+
+- La métrique `pass@k` issue de l'évaluation de génération de code : la formalisation du « rejouer N fois » utilisée ici
+- La littérature sur les biais du juge LLM (position, verbosité, style) et sur sa calibration contre un jugement humain
+- La loi de Goodhart appliquée aux suites d'évaluation : quand la mesure devient la cible, elle cesse d'être une bonne mesure
+
 ## Pour un agent
 
 > **Règle** — Un cas de test d'agent a une condition de succès vérifiable par une machine, jamais seulement "la réponse semble correcte".
@@ -73,6 +92,7 @@ Une suite d'évaluation d'agent joue exactement le rôle d'une suite de tests de
 > **Règle** — Préférer une assertion mécanique à un juge LLM chaque fois que le critère peut se formaliser.
 > **Signal d'alerte** — Un juge LLM utilisé sans avoir été calibré au préalable contre un jugement humain.
 > **Signal d'alerte** — Une suite d'évaluation qui n'a pas tourné depuis le dernier changement de prompt.
+> **Signal d'alerte** — Une conclusion de régression tirée d'une seule exécution d'un cas.
 
 ---
 

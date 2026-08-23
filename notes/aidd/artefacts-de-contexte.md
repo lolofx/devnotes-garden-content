@@ -1,14 +1,14 @@
 ---
 title: "Les artefacts de contexte"
 slug: artefacts-de-contexte
-tags: [aidd, skill, contexte]
+tags: [aidd, contexte]
 created: 2026-08-23
 updated: 2026-08-23
 summary: "Un agent vaut ce que vaut le contexte qu'on lui donne — et ce contexte se construit avec des artefacts durables, à condition qu'une même convention n'existe jamais à deux endroits."
 draft: true
 pillar: ai
 level: intermediaire
-related: [sdlc-pilote-par-ia, contexte-et-memoire, anatomie-d-un-agent, integration-events-vs-domain-events]
+related: [sdlc-pilote-par-ia, contexte-et-memoire, anatomie-d-un-agent, roles-specialises, integration-events-vs-domain-events]
 ---
 
 # Les artefacts de contexte
@@ -47,15 +47,15 @@ format: "type(scope): résumé court à l'impératif, en français"
 ```
 
 ```text
-# skills/release/SKILL.md — extrait, tel qu'il ne devrait pas être écrit
+# procedures/release.md — extrait, tel qu'il ne devrait pas être écrit
 Avant de committer, utilise ce format :
 "type: résumé, en anglais, avec ticket JIRA en suffixe"
 ```
 
-Les deux fichiers existent pour des raisons légitimes — l'un pour tout usage, l'autre pour un skill précis — et pourtant ils se contredisent. Le correctif n'est pas de choisir laquelle des deux versions est la bonne : c'est de retirer la définition du skill et d'y renvoyer vers la règle unique.
+Les deux fichiers existent pour des raisons légitimes — l'un pour tout usage, l'autre pour un skill précis — et pourtant ils se contredisent. Le correctif n'est pas de choisir laquelle des deux versions est la bonne : c'est de retirer la définition de la procédure et d'y renvoyer vers la règle unique.
 
 ```text
-# skills/release/SKILL.md — après correction
+# procedures/release.md — après correction
 Avant de committer, applique le format défini dans rules/commit-format.md.
 Ne redéfinis pas ce format ici.
 ```
@@ -69,6 +69,8 @@ Cette règle n'est pas propre aux agents : c'est la même exigence qu'une [sourc
 ## Limites
 
 L'excès inverse existe aussi : empiler des dizaines de règles chargées en permanence noie le contexte utile sous du bruit que l'agent ne peut plus vraiment prioriser. Une règle qui ne s'applique qu'à un cas rare n'a pas sa place dans le contexte permanent — elle appartient à un skill chargé seulement quand ce cas se présente. Le bon réflexe est le même que pour les gates : garder le socle permanent minimal, et déplacer tout ce qui est conditionnel vers un artefact qui ne se charge que lorsqu'il sert.
+
+Il existe une limite plus insidieuse, et elle attaque la thèse même de cette note. « Ne jamais dupliquer, toujours renvoyer vers la référence » suppose que l'artefact référencé sera **effectivement chargé** au moment où il compte. Or la [fenêtre de contexte est étroite et volatile](../agents/contexte-et-memoire), et un [rôle spécialisé](../orchestration/roles-specialises) reçoit par construction un contexte réduit. Une procédure qui dit « applique le format défini dans la règle globale » ne garantit pas que l'agent qui l'exécute aura cette règle sous les yeux : le renvoi peut être silencieusement cassé, et l'agent inventera alors sa propre version — soit exactement la divergence qu'on prétendait éviter. Le renvoi ne suffit pas : il faut aussi s'assurer que l'artefact référencé est chargeable, et vérifiable, depuis le contexte de celui qui doit l'appliquer.
 
 ## Pour aller plus loin
 

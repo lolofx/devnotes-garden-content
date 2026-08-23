@@ -8,7 +8,7 @@ created: 2026-08-23
 updated: 2026-08-23
 summary: "Faire tourner un agent jusqu'à un critère n'a de sens que si ce critère est vérifiable par une machine — sinon l'agent boucle sur son propre avis et diverge."
 draft: true
-related: [patterns-multi-agents, evaluer-un-agent, inbox-pattern]
+related: [patterns-multi-agents, evaluer-un-agent, handoff-et-contexte-partage, inbox-pattern]
 ---
 
 # Boucles et auto-correction
@@ -37,13 +37,14 @@ Une commande qui échoue en code 1, un test rouge, un contrat d'API violé : ce 
 - **Boucle infinie** — pas de plafond, la condition d'arrêt n'est jamais atteinte parce qu'elle est mal posée ou parce que la tâche est structurellement impossible dans les contraintes données.
 - **Dérive du critère** — l'agent, incapable de satisfaire la condition d'origine, la réinterprète discrètement à son avantage (« ce test n'était pas pertinent, je le supprime ») plutôt que de signaler l'échec.
 - **Correction qui casse ce qui marchait** — chaque itération corrige le symptôme visé mais introduit une régression ailleurs, invisible tant que la condition d'arrêt ne teste que le symptôme d'origine.
-- **Coût qui explose** — chaque itération consomme du contexte et des jetons ; sans plafond, une tâche difficile peut consommer un budget disproportionné avant d'échouer quand même.
+- **Coût qui explose, et pas linéairement** — le piège n'est pas le nombre d'itérations, c'est ce que chacune transporte. Dans la plupart des harnais, chaque tour réinjecte le transcript des précédents : le coût croît avec l'historique accumulé, donc de façon quadratique et non linéaire. Une boucle de 10 itérations coûte bien plus que 10 fois une itération.
 
 ## Les parades
 
 - **Plafond d'itérations** — un nombre maximal de tours, au-delà duquel la boucle s'arrête en échec explicite plutôt que de continuer indéfiniment.
 - **Condition d'arrêt externe à l'agent** — la commande de vérification n'est pas écrite ni modifiable par l'agent qui boucle ; sinon rien n'empêche la dérive du critère.
 - **Diff cumulé sous surveillance** — comparer l'état courant à l'état de départ à chaque itération (pas seulement l'itération précédente), pour détecter qu'une correction en défait une autre plutôt que de converger.
+- **Contexte réinitialisé entre itérations** — ne pas réinjecter tout le transcript, mais repartir de l'état vérifiable (le diff courant, la sortie d'erreur) plus un résumé de ce qui a déjà été tenté. C'est un [handoff](./handoff-et-contexte-partage) de la boucle vers elle-même, et il obéit aux mêmes règles.
 
 ```text
 $ for i in $(seq 1 5); do
@@ -62,6 +63,8 @@ Une boucle **rejoue** des actions : à chaque itération qui échoue, l'agent r�
 
 Une boucle d'auto-correction est, structurellement, un consommateur at-least-once de ses propres tentatives. Si une itération envoie un e-mail de notification, l'itération suivante ne doit pas en envoyer un second pour la même cause ; si une itération applique une migration, la suivante doit pouvoir la rejouer sans erreur si elle a déjà été appliquée. Concevoir une action déclenchée à l'intérieur d'une boucle sans se poser la question de l'idempotence, c'est reproduire — pour la même raison structurelle — le bug que l'Outbox/Inbox résout côté messagerie.
 
+Il faut être honnête sur une asymétrie que l'analogie masque. L'Inbox Pattern déduplique grâce à un `MessageId` **stable, porté par le message lui-même** : deux livraisons du même message partagent cet identifiant, et une contrainte d'unicité suffit. Une boucle d'agent n'a pas d'équivalent naturel — deux tentatives ne sont pas deux livraisons d'un message identique, ce sont deux actions régénérées, potentiellement différentes dans leur forme. L'idempotence y est donc plus difficile à obtenir, et elle se construit explicitement : une clé dérivée de l'intention plutôt que du texte de l'action, ou une vérification d'état avant d'agir (« cette facture existe-t-elle déjà ? ») plutôt qu'une déduplication après coup.
+
 ## Limites : ce qui ne se boucle pas
 
 Une boucle suppose un critère binaire, objectif, extérieur à l'agent. Une **décision produit** (« cette fonctionnalité est-elle la bonne priorité ? ») ou un **arbitrage de goût** (« ce nom de variable est-il le plus clair ? ») n'ont pas de commande qui sort en code 0. Faire boucler un agent sur ce genre de critère revient exactement au cas dégénéré du début : il boucle sur son propre avis, et chaque itération donne l'illusion de convergence sans qu'il y ait de vérité externe vers laquelle converger. Ces décisions se tranchent une fois, par un humain ou par un [arbitrage explicite](./patterns-multi-agents), pas en boucle.
@@ -77,7 +80,7 @@ Une boucle suppose un critère binaire, objectif, extérieur à l'agent. Une **d
 > **Règle** — Toute boucle a un plafond d'itérations explicite, au-delà duquel elle échoue plutôt que de continuer.
 > **Règle** — Tout effet de bord déclenché à l'intérieur d'une boucle doit être idempotent, car il peut être rejoué plusieurs fois.
 > **Signal d'alerte** — Un agent qui modifie ou supprime le test qui le fait échouer plutôt que de corriger le code.
-> **Signal d'alerte** — Une boucle utilisée pour trancher une question de goût ou de priorité produit, sans critère externe.
+> **Signal d'alerte** — Une boucle utilisée pour trancher une question de goût ou de priorité : faute de critère externe vers lequel converger, elle produit une illusion de convergence.
 
 ---
 

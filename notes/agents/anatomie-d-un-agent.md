@@ -1,7 +1,7 @@
 ---
 title: "Anatomie d'un agent"
 slug: anatomie-d-un-agent
-tags: [agents, contexte, prompt]
+tags: [agents, contexte]
 pillar: ai
 level: fondation
 created: 2026-08-23
@@ -72,7 +72,9 @@ Rien dans ce code ne dit "d'abord lire le fichier, puis le modifier, puis relanc
 
 ## Le modèle ne connaît que des ports
 
-C'est ici que l'anatomie d'un agent rejoint directement l'[architecture hexagonale](../hexagonal/ports-et-adapters) : un **outil**, du point de vue du modèle, est exactement un **port**. Le modèle ne voit qu'une description — un nom, des paramètres, un contrat — jamais l'implémentation qui se cache derrière. Que `read_file` lise sur un disque local, un bucket objet ou un mock de test, le modèle raisonne à l'identique : il ne connaît que l'interface.
+C'est ici que l'anatomie d'un agent rejoint directement l'[architecture hexagonale](../hexagonal/ports-et-adapters) : un **outil**, du point de vue du modèle, fonctionne comme un **port**. Le modèle ne voit qu'une description — un nom, des paramètres, un contrat — jamais l'implémentation qui se cache derrière. Que `read_file` lise sur un disque local, un bucket objet ou un mock de test, le modèle raisonne à l'identique : il ne connaît que l'interface.
+
+L'analogie a une limite à poser : en hexagonal, le port est déclaré *par l'intérieur* — c'est le domaine qui dicte ce dont il a besoin. Le schéma d'un outil, lui, est écrit par le développeur hôte, pas négocié par le modèle. Ce qui se transfère, ce n'est pas la paternité du contrat, c'est la règle de dépendance.
 
 L'implémentation du tool — le code qui ouvre réellement le fichier, appelle réellement l'API — est l'**adapter**. Et le modèle, dans cette lecture, joue le rôle du **domaine** : il porte la logique de décision, et ne doit jamais dépendre d'un détail d'infrastructure. Un bon design d'agent respecte la même règle de dépendance que l'hexagonal : le prompt qui pilote le modèle décrit des ports (« tu as accès à un outil qui lit des fichiers »), jamais des adapters (« tu appelles l'API interne montée sur tel cluster »).
 
@@ -92,9 +94,15 @@ Un agent ne se justifie que si la séquence d'actions **ne peut pas être connue
 
 Réserve l'agent aux tâches où le chemin dépend réellement de ce qui est découvert en cours de route — explorer un code inconnu, diagnostiquer une panne dont la cause n'est pas connue, arbitrer entre plusieurs contraintes. Pour une pipeline ETL, une validation de formulaire ou une génération de rapport au format fixe, l'agent n'ajoute que de l'aléa.
 
+## Pour aller plus loin
+
+- Anthropic, *Building Effective Agents* — la distinction workflow / agent, et quand chacun se justifie
+- Yao et al., *ReAct: Synergizing Reasoning and Acting in Language Models* (2022) — la formalisation de la boucle raisonner/agir/observer
+- Russell & Norvig, *Artificial Intelligence: A Modern Approach*, chapitre « Intelligent Agents » — la définition classique agent/environnement, antérieure aux LLM et toujours valable
+
 ## Pour un agent
 
-> **Règle** — Une boucle agentique existe dès que c'est le modèle, et non le code appelant, qui choisit la prochaine action.
+> **Règle** — Si tu peux écrire la séquence d'actions à l'avance sans avoir besoin d'observer un résultat intermédiaire, n'implémente pas un agent : implémente un workflow scripté.
 > **Règle** — Un outil décrit un contrat (port), jamais son implémentation (adapter) : le prompt ne doit jamais nommer un détail d'infrastructure.
 > **Règle** — Toute boucle agentique a besoin d'un critère d'arrêt explicite combinant condition de succès, budget et détection de blocage.
 > **Signal d'alerte** — Une séquence d'étapes connue à l'avance, câblée dans un agent au lieu d'un script : c'est un workflow qui s'ignore.

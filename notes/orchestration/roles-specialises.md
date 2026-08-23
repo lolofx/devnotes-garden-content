@@ -1,14 +1,14 @@
 ---
 title: "Pourquoi spécialiser ses agents"
 slug: roles-specialises
-tags: [orchestration, agents, prompt]
+tags: [orchestration, evaluation]
 pillar: ai
 level: fondation
 created: 2026-08-23
 updated: 2026-08-23
 summary: "Un agent qui cadre, code et vérifie dans la même conversation est juge et partie sur son propre travail : la spécialisation par rôle sépare des points de vue, pas seulement des tâches."
 draft: true
-related: [patterns-multi-agents, tdd-a-trois-agents, introduction-ddd]
+related: [patterns-multi-agents, tdd-a-trois-agents, outils-et-garde-fous, introduction-ddd]
 ---
 
 # Pourquoi spécialiser ses agents
@@ -30,7 +30,7 @@ Toutes les tâches ne justifient pas les six rôles. Ce qui justifie la séparat
 
 ## Le conflit d'intérêt : un agent ne juge pas bien ce qu'il vient de produire
 
-C'est l'argument central. Quand tu demandes au même agent « corrige ce bug puis dis-moi si c'est bon », son contexte au moment de juger contient déjà tout le raisonnement qui l'a mené à sa solution : les contraintes qu'il a satisfaites, les alternatives qu'il a écartées, les cas qu'il a — ou n'a pas — envisagés. Ce contexte est précisément ce qui biaise le jugement : l'agent évalue son travail à l'aune de son propre cadre, pas à l'aune de l'exigence réelle. Un agent qui juge son propre travail le valide presque toujours, non par complaisance, mais parce qu'il n'a plus accès à un point de vue extérieur au sien.
+C'est l'argument central. Quand tu demandes au même agent « corrige ce bug puis dis-moi si c'est bon », son contexte au moment de juger contient déjà tout le raisonnement qui l'a mené à sa solution : les contraintes qu'il a satisfaites, les alternatives qu'il a écartées, les cas qu'il a — ou n'a pas — envisagés. Ce contexte est précisément ce qui biaise le jugement : l'agent évalue son travail à l'aune de son propre cadre, pas à l'aune de l'exigence réelle. Un agent qui juge son propre travail a une forte tendance à le valider, non par complaisance, mais parce qu'il n'a plus accès à un point de vue extérieur au sien.
 
 Séparer les rôles, ce n'est pas ajouter un contrôle qualité en plus. C'est fabriquer un second point de vue qui n'a **pas** hérité du raisonnement du premier — il ne voit que le résultat, comme le verrait quelqu'un qui découvre le code.
 
@@ -38,9 +38,15 @@ Séparer les rôles, ce n'est pas ajouter un contrôle qualité en plus. C'est f
 
 Un agent dont le contexte entier tient en « voici un diff, voici les critères d'acceptation, dis si ça les remplit » ne peut pas être influencé par les six tours de négociation qui ont précédé l'implémentation — il ne les a jamais vus. Moins d'instructions concurrentes, moins de bruit accumulé sur des dizaines de tours, moins de dérive entre l'objectif initial et l'état courant de la conversation. Le rétrécissement du contexte n'est pas qu'une économie de jetons : c'est ce qui rend l'agent prévisible sur son unique tâche.
 
+## Séparer les contextes ne suffit pas : sépare aussi les droits
+
+Tout ce qui précède décrit une séparation **cognitive** : deux agents, deux contextes, deux points de vue. Elle réduit fortement le risque, elle ne le supprime pas — rien n'empêche techniquement un agent implémenteur de modifier le test qui le gêne, si l'outil d'écriture le lui permet.
+
+La séparation devient robuste quand elle s'accompagne d'une séparation des **droits** : le reviewer n'a pas d'outil d'écriture du tout, l'implémenteur n'a pas accès en écriture au répertoire de tests. À ce moment-là, la violation n'est plus une question de jugement du modèle, c'est un appel qui échoue au niveau du programme hôte. C'est la même bascule que pour un [garde-fou d'outil](../agents/outils-et-garde-fous) : tant que la règle vit dans le prompt, elle est négociable.
+
 ## Un rôle d'agent est un bounded context
 
-Le pont avec le DDD est direct. Un [bounded context](../ddd/introduction-ddd) est une frontière explicite à l'intérieur de laquelle un vocabulaire et un objectif ont un sens unique — le mot « Client » ne signifie pas la même chose en Facturation et en Support, et vouloir un modèle « Client » universel produit une usine à gaz. Un rôle d'agent est exactement ça : à l'intérieur du rôle « reviewer », le mot « bon » veut dire « remplit les critères d'acceptation » ; à l'intérieur du rôle « implémenter », il veut dire « compile et passe les tests que j'ai écrits en cours de route ». Confondre les deux dans un seul agent, c'est vouloir un agent universel — et ça produit la même dérive qu'un modèle métier universel : un objet qui doit tout signifier finit par ne rien signifier de précis.
+Ce conflit d'intérêt se retrouve sous une autre forme en DDD, et l'analogie éclaire la conception des rôles. Un [bounded context](../ddd/introduction-ddd) est une frontière explicite à l'intérieur de laquelle un vocabulaire et un objectif ont un sens unique — le mot « Client » ne signifie pas la même chose en Facturation et en Support, et vouloir un modèle « Client » universel produit une usine à gaz. Un rôle d'agent est exactement ça : à l'intérieur du rôle « reviewer », le mot « bon » veut dire « remplit les critères d'acceptation » ; à l'intérieur du rôle « implémenter », il veut dire « compile et passe les tests que j'ai écrits en cours de route ». Confondre les deux dans un seul agent, c'est vouloir un agent universel — et ça produit la même dérive qu'un modèle métier universel : un objet qui doit tout signifier finit par ne rien signifier de précis.
 
 ## Exemple concret
 

@@ -19,7 +19,7 @@ Critique structurée d'une note du devnotes-garden. **Trois passes obligatoires,
 | **`draft` explicite** | Le champ existe. Un `draft` absent = note **publiée** par le build |
 | **Frontmatter v2** | `pillar` présent et cohérent avec le dossier. `level` présent et défendable |
 | **`verified`** | Présent si et seulement si la note est de forme *recette* |
-| **`related`** | Liste exactement les slugs du footer *Note liée*, dans le même ordre |
+| **`related`** | Liste tous les slugs liés depuis le corps, footer compris — pas seulement ceux du footer |
 | **Slug** | Kebab-case strict, identique au nom de fichier, **unique dans tout le garden** |
 | **Tags** | 5 maximum · 1er tag = nom du dossier · 2 domaines maximum et seulement pour une note-pont · `architecture` absent · vocabulaire réservé respecté · `dotnet` seulement si .NET est le sujet |
 | **Dates** | Format `YYYY-MM-DD` sans guillemets |
@@ -89,7 +89,7 @@ La section `## Pour un agent` est ce qui rend le garden exécutable par une mach
 | Niveau | Exemples |
 |--------|---------|
 | 🔴 **Bloquant** | Définition incorrecte · concept-clé manquant · `draft: false` sur une note incomplète · slug incohérent avec le nom de fichier · **slug en collision avec une autre note** · **lien interne vers une note inexistante** · champ requis manquant · arbitrage sans verdict |
-| 🟡 **À améliorer** | Exemple concret absent · section « Limites » absente · footer manquant · H1 ≠ title · **tag `architecture`** · plus de 5 tags · 1er tag ≠ dossier · extension `.md` dans un lien · `related` désynchronisé du footer · **capsule absente sur une note publiée** · **capsule non vérifiable** · `verified` périmé · outillage daté dans une note concept |
+| 🟡 **À améliorer** | Exemple concret absent · section « Limites » absente · footer manquant · H1 ≠ title · **tag `architecture`** · plus de 5 tags · 1er tag ≠ dossier · extension `.md` dans un lien · `related` incomplet par rapport aux liens du corps · **capsule absente sur une note publiée** · **capsule non vérifiable** · `verified` périmé · outillage daté dans une note concept |
 | 🟢 **Optionnel** | Diagramme qui enrichirait · lien interne supplémentaire · « Pour aller plus loin » étoffé · pont craft ↔ IA à exploiter |
 
 ## Erreurs fréquentes du critique
