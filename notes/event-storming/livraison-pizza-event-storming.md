@@ -2,10 +2,13 @@
 title: "Event Storming en pratique — Livraison de pizza"
 slug: livraison-pizza-event-storming
 tags: [event-storming, ddd, workshop, modeling]
+pillar: craft
+level: intermediaire
 created: 2025-05-08
-updated: 2026-04-14
+updated: 2026-08-23
 summary: "Un export Event Storming complet (cas livraison de pizza) généré par EventStormer, lu et commenté pas à pas pour s'entraîner à décoder un mur."
 draft: false
+related: [event-storming-color-code]
 ---
 
 # Event Storming en pratique — Livraison de pizza

@@ -2,10 +2,13 @@
 title: "Event Storming — Le code couleur expliqué"
 slug: event-storming-color-code
 tags: [event-storming, ddd, workshop, modeling]
+pillar: craft
+level: fondation
 created: 2025-04-17
-updated: 2025-04-17
+updated: 2026-08-23
 summary: "Comprendre les post-it de l'Event Storming : à quoi sert chaque couleur, quand l'utiliser, et comment lire un tableau de bout en bout."
 draft: false
+related: [bff-clean-archi]
 ---
 
 # Event Storming — Le code couleur expliqué

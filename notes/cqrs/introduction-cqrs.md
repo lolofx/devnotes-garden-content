@@ -1,11 +1,14 @@
 ---
 title: "Introduction au CQRS"
 slug: introduction-cqrs
-tags: [cqrs, architecture, ddd, clean-architecture]
+tags: [cqrs, ddd, clean-architecture, read-model]
+pillar: craft
+level: fondation
 created: 2025-09-01
-updated: 2026-05-29
+updated: 2026-08-23
 summary: "Ce que CQRS change concrètement dans ton architecture : séparer les lectures des écritures pour mieux scaler, tester et évoluer."
 draft: false
+related: [bff-clean-archi, introduction-ddd, composition-multi-contexte]
 ---
 
 # Introduction au CQRS

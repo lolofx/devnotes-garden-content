@@ -1,11 +1,14 @@
 ---
 title: "BFF vs GraphQL — Choisir son mode de composition"
 slug: bff-vs-graphql
-tags: [bff, graphql, api, architecture, composition]
+tags: [bff, graphql, api, composition]
+pillar: craft
+level: avance
 created: 2026-05-01
-updated: 2026-05-01
+updated: 2026-08-23
 summary: "BFF et GraphQL répondent au même problème — des clients aux besoins différents — avec des compromis radicalement différents. Comment choisir, et pourquoi ne pas empiler les deux par défaut."
 draft: false
+related: [bff-clean-archi, bff-signalr-gateway-arbitrage, composition-multi-contexte]
 ---
 
 # BFF vs GraphQL — Choisir son mode de composition

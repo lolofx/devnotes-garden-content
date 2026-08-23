@@ -1,11 +1,14 @@
 ---
 title: "Backend For Frontend & Clean Architecture"
 slug: bff-clean-archi
-tags: [bff, clean-architecture, ddd, architecture, dotnet, angular]
+tags: [bff, clean-architecture, composition]
+pillar: craft
+level: intermediaire
 created: 2025-09-11
-updated: 2026-04-17
+updated: 2026-08-23
 summary: "Pourquoi introduire un BFF entre ton frontend et ton backend métier, et comment l'intégrer proprement dans une Clean Architecture."
 draft: false
+related: [event-storming-color-code, bff-vs-graphql, composition-multi-contexte]
 ---
 
 # Backend For Frontend & Clean Architecture

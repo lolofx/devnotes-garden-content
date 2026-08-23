@@ -1,11 +1,14 @@
 ---
 title: Outbox Pattern — publication fiable de messages
 slug: outbox-pattern
-tags: [messaging, architecture, reliability, microservices, ddd]
+tags: [messaging, reliability, microservices]
+pillar: craft
+level: intermediaire
 created: 2026-06-10
-updated: 2026-06-10
+updated: 2026-08-23
 summary: Publier un message de façon atomique avec le changement d'état métier, sans transaction distribuée, en passant par une table relais lue par un processus de dispatch.
 draft: false
+related: [inbox-pattern, introduction-cqrs, introduction-ddd]
 ---
 
 # Outbox Pattern — publication fiable de messages
