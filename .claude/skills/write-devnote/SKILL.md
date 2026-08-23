@@ -143,25 +143,31 @@ verified: 2026-08-23
 
 ## Politique de tags
 
-> **5 tags maximum, dont exactement 1 tag de domaine.**
+> **5 tags maximum. Le 1er tag est le domaine et vaut le nom du dossier. 2 domaines au maximum.**
 
-### Vocabulaire de domaine (obligatoire, 1 seul)
+### Vocabulaire de domaine
 
 `ddd` · `cqrs` · `hexagonal` · `bff` · `event-storming` · `messaging` · `dotnet` · `testing` · `infrastructure` · `agents` · `orchestration` · `aidd`
 
-Un par note. Il correspond en général au dossier, mais pas toujours : une note rangée dans `cqrs/` peut avoir `bff` pour domaine si c'est de là qu'on la cherche.
+Le **1er tag** est obligatoirement celui du dossier : il ancre la note.
+
+Un **2e** tag de domaine n'est autorisé que pour une vraie **note-pont**, celle qui traite explicitement la rencontre de deux domaines — *Domain Events vs Integration Events* est autant du `ddd` que du `messaging`. Jamais un 3e : au-delà, la note ne parle plus de rien en particulier.
 
 ### Vocabulaire transverse (0 à 4)
 
-`clean-architecture` · `microservices` · `idempotence` · `reliability` · `read-model` · `api` · `workshop` · `modeling` · `integration-events` · `domain-events` · `angular` · `signalr` · `graphql` · `gateway` · `tdd` · `memoire` · `contexte` · `prompt` · `evaluation` · `mcp` · `skill`
+`clean-architecture` · `composition` · `read-model` · `integration-events` · `domain-events` · `modeling` · `workshop` · `api` · `graphql` · `gateway` · `signalr` · `idempotence` · `reliability` · `microservices` · `tdd` · `memoire` · `contexte` · `prompt` · `evaluation` · `mcp` · `skill`
 
 ### Tag banni
 
 **`architecture`** — il était présent sur 10 notes sur 12. Un tag porté par 83 % du corpus ne filtre plus rien, il gonfle la page `/tags` sans jamais aider à trouver. Ne jamais le remettre.
 
-### Ouverture d'un tag transverse
+### Le langage n'est pas un tag
 
-Un tag nouveau ne s'ajoute qu'à partir de sa **2e** note. Un tag à une occurrence est une étiquette privée, pas une navigation. Au moment de l'audit initial, 20 tags sur 29 étaient dans ce cas.
+`dotnet` ne se pose que sur une note qui traite **de .NET comme sujet**, pas sur une note qui contient du C#. 10 notes sur 12 en contiennent : ce serait `architecture` bis. Même logique pour `angular`.
+
+### Tags à occurrence unique
+
+Un tag à une seule occurrence est toléré **s'il est le concept central de sa note** (`idempotence` sur l'Inbox Pattern, `signalr` sur la note SignalR). Sinon il se supprime : c'est une étiquette privée, pas une navigation. L'audit les liste en informatif à chaque passage — si la liste s'allonge sans que le corpus grossisse, la taxonomie dérive.
 
 ---
 
@@ -320,10 +326,16 @@ Bloc custom rendu par l'app. Types valides : `actor`, `command`, `aggregate`, `e
 
 ## Footer « Note liée »
 
-Toujours en italique, chemin relatif **sans extension `.md`** — l'app navigue par slug :
+Toujours en italique, chemin relatif **sans extension `.md`** :
 
 ```markdown
 *Note liée : [Titre de la note](../categorie/slug) — une phrase d'accroche.*
+```
+
+Note du même dossier :
+
+```markdown
+*Note liée : [Titre de la note](./slug) — une phrase d'accroche.*
 ```
 
 Plusieurs liens :
@@ -332,7 +344,11 @@ Plusieurs liens :
 *Notes liées : [Note A](../cat/slug-a) — accroche. [Note B](../cat/slug-b) — accroche.*
 ```
 
-**Jamais** `../categorie/slug.md`. Et le champ `related` du frontmatter doit lister exactement ces slugs, dans le même ordre.
+Les deux formes relatives sont valides. Le chemin doit **résoudre vers un fichier réel** : c'est ce qui permet à l'audit d'attraper un slug mal tapé.
+
+L'extension `.md` est une entorse à la convention, pas une casse : `rewriteNoteLinks` ne garde que le basename du lien et retire `.md` lui-même. On l'évite quand même, pour que tout le corpus se lise pareil.
+
+Et le champ `related` du frontmatter doit lister exactement ces slugs, dans le même ordre.
 
 ---
 
@@ -344,8 +360,11 @@ Plusieurs liens :
 | Champ `draft` oublié | Une note sans `draft` est **publiée** — le mettre explicitement |
 | Slug avec majuscules ou accents | Kebab-case strict : `introduction-cqrs` |
 | Slug déjà pris dans un autre dossier | La note la plus ancienne disparaît du site sans erreur — vérifier avant |
+| Lien vers une note inexistante | Seule vraie casse de navigation — l'audit la remonte en 🔴 |
 | Date entre guillemets | `created: 2026-05-29`, sans guillemets |
 | Tag `architecture` | Banni. Choisir un tag de domaine réel |
+| Tag `dotnet` parce que la note contient du C# | Le langage n'est pas un sujet — réserver `dotnet` aux notes sur .NET |
+| 1er tag ≠ nom du dossier | Le 1er tag ancre la note, il vaut le dossier |
 | 8 tags sur une note | 5 maximum, dont 1 de domaine |
 | `related` désynchronisé du footer | Les deux disent la même chose, ou aucun des deux n'est fiable |
 | `verified` sur une note concept | Réservé à la forme recette |

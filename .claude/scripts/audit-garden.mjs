@@ -19,8 +19,15 @@ const DOMAIN_TAGS = new Set([
   'ddd', 'cqrs', 'hexagonal', 'bff', 'event-storming', 'messaging',
   'dotnet', 'testing', 'infrastructure', 'agents', 'orchestration', 'aidd',
 ]);
+const TRANSVERSE_TAGS = new Set([
+  'clean-architecture', 'composition', 'read-model', 'integration-events', 'domain-events',
+  'modeling', 'workshop', 'api', 'graphql', 'gateway', 'signalr',
+  'idempotence', 'reliability', 'microservices',
+  'tdd', 'memoire', 'contexte', 'prompt', 'evaluation', 'mcp', 'skill',
+]);
 const BANNED_TAGS = new Set(['architecture']);
 const MAX_TAGS = 5;
+const MAX_DOMAIN_TAGS = 2;
 const REQUIRED_FIELDS = ['title', 'slug', 'tags', 'created', 'updated', 'summary'];
 const VERIFIED_MAX_MONTHS = 6;
 const UPDATED_MAX_MONTHS = 18;
@@ -128,26 +135,32 @@ for (const [slug, files] of bySlug) {
   }
 }
 
-// 🔴 liens internes : cassés ou avec extension .md
-const LINK_RE = /\]\(\.\.\/([^)\s]+)\)/g;
+// 🔴 liens internes cassés · 🟡 extension .md
+// Les deux formes relatives sont acceptées : `./slug` (même dossier) et `../categorie/slug`.
+// L'app ne garde que le basename du lien et retire `.md` elle-même (rewriteNoteLinks),
+// donc une extension .md navigue quand même : c'est une entorse à la convention, pas une casse.
+const LINK_RE = /\]\((\.\.?\/[^)\s]+)\)/g;
 const linkTargets = new Map(); // slug cible -> notes qui pointent dessus
 for (const note of notes) {
-  for (const [, target] of note.body.matchAll(LINK_RE)) {
-    if (target.endsWith('.md')) {
-      add('error', note.rel, 'extension interdite', `lien "../${target}" porte l'extension .md — l'app ne naviguera pas`);
+  for (const [, href] of note.body.matchAll(LINK_RE)) {
+    const clean = href.replace(/\.md$/, '');
+    if (href.endsWith('.md')) {
+      add('warn', note.rel, 'extension interdite', `lien "${href}" porte l'extension .md — convention : sans extension`);
+    }
+    const resolved = clean.startsWith('./')
+      ? `${note.theme}/${clean.slice(2)}`
+      : clean.replace(/^\.\.\//, '');
+    if (!knownPaths.has(resolved)) {
+      add('error', note.rel, 'lien cassé', `lien "${href}" ne correspond à aucune note`);
       continue;
     }
-    if (!knownPaths.has(target)) {
-      add('error', note.rel, 'lien cassé', `lien "../${target}" ne correspond à aucune note`);
-      continue;
-    }
-    const targetSlug = target.split('/').pop();
+    const targetSlug = resolved.split('/').pop();
     if (!linkTargets.has(targetSlug)) linkTargets.set(targetSlug, []);
     linkTargets.get(targetSlug).push(note.data.slug);
   }
 }
 
-// 🟡 tags
+// 🟡 tags — tag 1 = le dossier, 2 domaines au maximum, vocabulaire réservé
 for (const note of notes) {
   const tags = Array.isArray(note.data.tags) ? note.data.tags : [];
   if (tags.length > MAX_TAGS) {
@@ -157,11 +170,16 @@ for (const note of notes) {
   if (banned.length) {
     add('warn', note.rel, 'tags', `tag banni : ${banned.join(', ')}`);
   }
+  if (tags.length && tags[0] !== note.theme) {
+    add('warn', note.rel, 'tags', `1er tag "${tags[0]}" ≠ dossier "${note.theme}" — le tag de domaine ancre la note`);
+  }
   const domains = tags.filter((t) => DOMAIN_TAGS.has(t));
-  if (domains.length === 0) {
-    add('warn', note.rel, 'tags', `aucun tag de domaine — en attendre exactement 1`);
-  } else if (domains.length > 1) {
-    add('warn', note.rel, 'tags', `${domains.length} tags de domaine (${domains.join(', ')}) — en attendre exactement 1`);
+  if (domains.length > MAX_DOMAIN_TAGS) {
+    add('warn', note.rel, 'tags', `${domains.length} tags de domaine (${domains.join(', ')}) — ${MAX_DOMAIN_TAGS} au maximum, et seulement pour une vraie note-pont`);
+  }
+  const unknown = tags.filter((t) => !DOMAIN_TAGS.has(t) && !TRANSVERSE_TAGS.has(t) && !BANNED_TAGS.has(t));
+  if (unknown.length) {
+    add('warn', note.rel, 'tags', `hors vocabulaire réservé : ${unknown.join(', ')}`);
   }
 }
 
@@ -177,7 +195,7 @@ for (const note of notes) {
   if (note.data.related === undefined) continue;
   const declared = Array.isArray(note.data.related) ? note.data.related : [];
   const footerSlugs = [...note.body.matchAll(LINK_RE)]
-    .map(([, target]) => target.split('/').pop())
+    .map(([, href]) => href.replace(/\.md$/, '').split('/').pop())
     .filter((s) => knownSlugs.has(s));
   const unique = [...new Set(footerSlugs)];
   const missing = unique.filter((s) => !declared.includes(s));
@@ -246,6 +264,18 @@ for (const rule of CONTROLS) {
   const hits = findings.filter((f) => f.rule === rule).length;
   console.log(`   ${hits === 0 ? '✅' : '⚠️ '} ${rule}${hits ? ` — ${hits}` : ''}`);
 }
+
+const tagCount = new Map();
+for (const note of notes) {
+  for (const tag of Array.isArray(note.data.tags) ? note.data.tags : []) {
+    tagCount.set(tag, (tagCount.get(tag) ?? 0) + 1);
+  }
+}
+const singletons = [...tagCount].filter(([, n]) => n === 1).map(([t]) => t).sort();
+console.log(`\nInformatif`);
+console.log(`   ${tagCount.size} tag(s) distinct(s) pour ${notes.length} note(s)`);
+console.log(`   ${singletons.length} tag(s) à occurrence unique${singletons.length ? ` : ${singletons.join(', ')}` : ''}`);
+console.log(`   → tolérés quand le tag est le concept central de sa note, à supprimer sinon`);
 
 console.log(`\n${errors.length} bloquant(s) · ${warnings.length} avertissement(s)\n`);
 process.exit(errors.length > 0 ? 1 : 0);

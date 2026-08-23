@@ -21,12 +21,12 @@ Critique structurée d'une note du devnotes-garden. **Trois passes obligatoires,
 | **`verified`** | Présent si et seulement si la note est de forme *recette* |
 | **`related`** | Liste exactement les slugs du footer *Note liée*, dans le même ordre |
 | **Slug** | Kebab-case strict, identique au nom de fichier, **unique dans tout le garden** |
-| **Tags** | 5 maximum · exactement 1 tag de domaine · `architecture` absent · vocabulaire réservé respecté |
+| **Tags** | 5 maximum · 1er tag = nom du dossier · 2 domaines maximum et seulement pour une note-pont · `architecture` absent · vocabulaire réservé respecté · `dotnet` seulement si .NET est le sujet |
 | **Dates** | Format `YYYY-MM-DD` sans guillemets |
 | **H1** | Première ligne du corps, identique au `title` |
 | **Forme** | La note suit un des 3 squelettes (concept / arbitrage / recette), sans les mélanger |
 | **Longueur** | ≤ 250 lignes. Au-delà : proposer un découpage précis, pas une coupe à la hache |
-| **Footer** | *Note liée* présent, italique, chemin **sans `.md`**, singulier si 1 lien |
+| **Footer** | *Note liée* présent, italique, chemin **sans `.md`**, singulier si 1 lien. `./slug` et `../cat/slug` sont tous deux valides, mais le chemin doit résoudre vers un fichier réel |
 | **Diagrammes** | Un `mermaid` manque-t-il là où il éclairerait l'architecture ? Un `event-storming` est-il utilisable ? |
 | **Langue** | Français, tutoiement, ton pédagogique |
 
@@ -88,8 +88,8 @@ La section `## Pour un agent` est ce qui rend le garden exécutable par une mach
 
 | Niveau | Exemples |
 |--------|---------|
-| 🔴 **Bloquant** | Définition incorrecte · concept-clé manquant · `draft: false` sur une note incomplète · slug incohérent avec le nom de fichier · **slug en collision avec une autre note** · champ requis manquant · arbitrage sans verdict |
-| 🟡 **À améliorer** | Exemple concret absent · section « Limites » absente · footer manquant · H1 ≠ title · **tag `architecture`** · plus de 5 tags · `related` désynchronisé du footer · **capsule absente sur une note publiée** · **capsule non vérifiable** · `verified` périmé · outillage daté dans une note concept |
+| 🔴 **Bloquant** | Définition incorrecte · concept-clé manquant · `draft: false` sur une note incomplète · slug incohérent avec le nom de fichier · **slug en collision avec une autre note** · **lien interne vers une note inexistante** · champ requis manquant · arbitrage sans verdict |
+| 🟡 **À améliorer** | Exemple concret absent · section « Limites » absente · footer manquant · H1 ≠ title · **tag `architecture`** · plus de 5 tags · 1er tag ≠ dossier · extension `.md` dans un lien · `related` désynchronisé du footer · **capsule absente sur une note publiée** · **capsule non vérifiable** · `verified` périmé · outillage daté dans une note concept |
 | 🟢 **Optionnel** | Diagramme qui enrichirait · lien interne supplémentaire · « Pour aller plus loin » étoffé · pont craft ↔ IA à exploiter |
 
 ## Erreurs fréquentes du critique
