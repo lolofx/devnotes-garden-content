@@ -7,7 +7,7 @@ level: fondation
 created: 2026-08-23
 updated: 2026-08-23
 summary: "Un agent qui cadre, code et vérifie dans la même conversation est juge et partie sur son propre travail : la spécialisation par rôle sépare des points de vue, pas seulement des tâches."
-draft: true
+draft: false
 related: [patterns-multi-agents, tdd-a-trois-agents, outils-et-garde-fous, introduction-ddd]
 ---
 

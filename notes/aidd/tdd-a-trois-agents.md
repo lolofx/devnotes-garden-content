@@ -5,7 +5,7 @@ tags: [aidd, testing]
 created: 2026-08-23
 updated: 2026-08-23
 summary: "Séparer l'écriture des tests, l'implémentation et la review entre trois agents distincts déplace la triche du domaine de la discipline vers celui des permissions — à condition que la séparation soit techniquement appliquée, pas seulement demandée."
-draft: true
+draft: false
 pillar: ai
 level: intermediaire
 related: [roles-specialises, sdlc-pilote-par-ia, evaluer-un-agent, outils-et-garde-fous, introduction-cqrs]

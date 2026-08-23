@@ -7,7 +7,7 @@ level: intermediaire
 created: 2026-08-23
 updated: 2026-08-23
 summary: "Pourquoi une sortie qui a l'air bonne ne prouve rien quand elle est non déterministe, et comment construire une suite d'évaluation qui détecte une régression de prompt, de modèle ou d'outil."
-draft: true
+draft: false
 related: [anatomie-d-un-agent, gates-et-verification, tdd-a-trois-agents, ports-et-adapters]
 ---
 

@@ -7,7 +7,7 @@ level: fondation
 created: 2026-08-23
 updated: 2026-08-23
 summary: "La fenêtre de contexte est une ressource rare et volatile : pourquoi la mémoire persistante d'un agent doit être écrite comme une projection pour la question qu'on posera plus tard, pas comme un journal brut."
-draft: true
+draft: false
 related: [anatomie-d-un-agent, handoff-et-contexte-partage, introduction-cqrs]
 ---
 

@@ -5,7 +5,7 @@ tags: [aidd, evaluation]
 created: 2026-08-23
 updated: 2026-08-23
 summary: "Ce que change un développement piloté par des agents n'est pas la chaîne cadrer-planifier-implémenter-valider-reviewer-livrer, mais le coût relatif de chacune de ses étapes."
-draft: true
+draft: false
 pillar: ai
 level: fondation
 related: [roles-specialises, artefacts-de-contexte, gates-et-verification, tdd-a-trois-agents, introduction-ddd]

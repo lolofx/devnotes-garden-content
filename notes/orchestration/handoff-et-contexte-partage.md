@@ -7,7 +7,7 @@ level: avance
 created: 2026-08-23
 updated: 2026-08-23
 summary: "Le second agent ne voit pas le raisonnement du premier, seulement ce qui lui est explicitement transmis : le handoff est un contrat à concevoir, pas un partage de mémoire à espérer."
-draft: true
+draft: false
 related: [patterns-multi-agents, integration-events-vs-domain-events, contexte-et-memoire]
 ---
 

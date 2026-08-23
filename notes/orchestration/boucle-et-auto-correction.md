@@ -7,7 +7,7 @@ level: avance
 created: 2026-08-23
 updated: 2026-08-23
 summary: "Faire tourner un agent jusqu'à un critère n'a de sens que si ce critère est vérifiable par une machine — et que si ce critère a lui-même été mis à l'épreuve, car une boucle converge vers son oracle, pas vers l'intention derrière."
-draft: true
+draft: false
 related: [patterns-multi-agents, evaluer-un-agent, handoff-et-contexte-partage, inbox-pattern]
 ---
 

@@ -5,7 +5,7 @@ tags: [aidd, evaluation, reliability]
 created: 2026-08-23
 updated: 2026-08-23
 summary: "Une gate est un point de passage qu'une machine peut trancher seule — pas une opinion d'agent sur la qualité de son propre travail."
-draft: true
+draft: false
 pillar: ai
 level: avance
 related: [sdlc-pilote-par-ia, evaluer-un-agent, boucle-et-auto-correction, introduction-ddd]

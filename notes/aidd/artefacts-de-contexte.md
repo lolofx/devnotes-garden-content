@@ -5,7 +5,7 @@ tags: [aidd, contexte]
 created: 2026-08-23
 updated: 2026-08-23
 summary: "Un agent vaut ce que vaut le contexte qu'on lui donne — et ce contexte se construit avec des artefacts durables, à condition qu'une même convention n'existe jamais à deux endroits."
-draft: true
+draft: false
 pillar: ai
 level: intermediaire
 related: [sdlc-pilote-par-ia, contexte-et-memoire, anatomie-d-un-agent, roles-specialises, integration-events-vs-domain-events]

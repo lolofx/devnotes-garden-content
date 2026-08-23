@@ -7,7 +7,7 @@ level: fondation
 created: 2026-08-23
 updated: 2026-08-23
 summary: "Ce qui distingue un agent d'un simple appel LLM : une boucle où c'est le modèle qui choisit la prochaine action jusqu'à un critère d'arrêt, et le prix que ça coûte en prévisibilité."
-draft: true
+draft: false
 related: [outils-et-garde-fous, contexte-et-memoire, ports-et-adapters, evaluer-un-agent]
 ---
 

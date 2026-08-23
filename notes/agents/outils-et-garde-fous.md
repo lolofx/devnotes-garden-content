@@ -7,7 +7,7 @@ level: intermediaire
 created: 2026-08-23
 updated: 2026-08-23
 summary: "La description d'un outil fait partie du code qu'un agent exécute : nommage, granularité, garde-fous entre actions réversibles et irréversibles, et pourquoi un outil rappelé deux fois ne doit jamais produire deux effets."
-draft: true
+draft: false
 related: [anatomie-d-un-agent, ports-et-adapters, introduction-ddd, inbox-pattern]
 ---
 

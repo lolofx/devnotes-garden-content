@@ -7,7 +7,7 @@ level: intermediaire
 created: 2026-08-23
 updated: 2026-08-23
 summary: "Quatre topologies pour composer des agents spécialisés — pipeline, fan-out/fan-in, coordinateur/travailleurs, débat — avec leur coût, leur mode d'échec typique, et les critères pour choisir."
-draft: true
+draft: false
 related: [roles-specialises, composition-multi-contexte, handoff-et-contexte-partage, boucle-et-auto-correction]
 ---
 
