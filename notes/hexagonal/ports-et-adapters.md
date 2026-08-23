@@ -1,11 +1,14 @@
 ---
 title: "Architecture Hexagonale — Ports & Adapters"
 slug: ports-et-adapters
-tags: [hexagonal, clean-architecture, ports-adapters, architecture, ddd]
+tags: [hexagonal, clean-architecture, ddd]
+pillar: craft
+level: fondation
 created: 2026-06-01
-updated: 2026-06-01
+updated: 2026-08-23
 summary: "La règle de dépendance, les ports (interfaces) et les adapters (implémentations) : le squelette commun à la Clean Architecture et à l'Architecture Hexagonale."
 draft: false
+related: [introduction-ddd, introduction-cqrs, bff-clean-archi]
 ---
 
 # Architecture Hexagonale — Ports & Adapters

@@ -1,11 +1,14 @@
 ---
 title: "Composer un dashboard multi-contexte : fan-out vs projection"
 slug: composition-multi-contexte
-tags: [cqrs, bff, read-model, integration-events, architecture, dashboard]
+tags: [cqrs, bff, read-model, composition, integration-events]
+pillar: craft
+level: avance
 created: 2026-06-01
-updated: 2026-06-01
+updated: 2026-08-23
 summary: "Quand un écran a besoin de données venant de plusieurs bounded contexts, deux stratégies s'opposent : appeler les services à la volée (fan-out) ou maintenir une projection pré-calculée. Critères de choix."
 draft: false
+related: [introduction-cqrs, integration-events-vs-domain-events, bff-clean-archi]
 ---
 
 # Composer un dashboard multi-contexte : fan-out vs projection

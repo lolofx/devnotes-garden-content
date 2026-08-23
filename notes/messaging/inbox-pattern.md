@@ -1,11 +1,14 @@
 ---
 title: Inbox Pattern — consommation idempotente de messages
 slug: inbox-pattern
-tags: [messaging, architecture, idempotence, microservices, ddd]
+tags: [messaging, idempotence, reliability, microservices]
+pillar: craft
+level: intermediaire
 created: 2026-06-10
-updated: 2026-06-10
+updated: 2026-08-23
 summary: Garantir qu'un message livré "au moins une fois" par un broker ne soit traité qu'une seule fois côté métier, grâce à une table de déduplication transactionnelle.
 draft: false
+related: [outbox-pattern, introduction-cqrs, introduction-ddd]
 ---
 
 # Inbox Pattern — consommation idempotente de messages

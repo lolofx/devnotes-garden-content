@@ -2,10 +2,13 @@
 title: "Event Storming — Le code couleur expliqué"
 slug: event-storming-color-code
 tags: [event-storming, ddd, workshop, modeling]
+pillar: craft
+level: fondation
 created: 2025-04-17
-updated: 2025-04-17
+updated: 2026-08-23
 summary: "Comprendre les post-it de l'Event Storming : à quoi sert chaque couleur, quand l'utiliser, et comment lire un tableau de bout en bout."
 draft: false
+related: [livraison-pizza-event-storming, bff-clean-archi]
 ---
 
 # Event Storming — Le code couleur expliqué
@@ -118,4 +121,4 @@ Respecter cette convention, c'est pouvoir partager un Event Storming avec n'impo
 
 ---
 
-*Note liée : [BFF & Clean Architecture](../bff/bff-clean-archi) — comment cet Event Storming se traduit en code côté backend et frontend.*
+*Notes liées : [Event Storming en pratique — Livraison de pizza](./livraison-pizza-event-storming) — un mur complet à décoder pas à pas, exporté depuis EventStormer. [BFF & Clean Architecture](../bff/bff-clean-archi) — comment cet Event Storming se traduit en code côté backend et frontend.*

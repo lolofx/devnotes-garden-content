@@ -1,11 +1,14 @@
 ---
 title: "Events de domaine vs Events d'intégration"
 slug: integration-events-vs-domain-events
-tags: [ddd, events, integration-events, domain-events, outbox, messaging, architecture]
+tags: [ddd, messaging, integration-events, domain-events]
+pillar: craft
+level: intermediaire
 created: 2026-02-01
-updated: 2026-02-01
+updated: 2026-08-23
 summary: "La différence fondamentale entre un Domain Event (interne à l'agrégat) et un Integration Event (destiné aux autres bounded contexts) — et pourquoi les confondre casse l'autonomie des contextes."
 draft: false
+related: [introduction-ddd, introduction-cqrs, composition-multi-contexte, ports-et-adapters]
 ---
 
 # Events de domaine vs Events d'intégration

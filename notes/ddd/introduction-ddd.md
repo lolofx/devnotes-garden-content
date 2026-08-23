@@ -1,11 +1,14 @@
 ---
 title: "Introduction au DDD"
 slug: introduction-ddd
-tags: [ddd, architecture, modeling]
+tags: [ddd, modeling]
+pillar: craft
+level: fondation
 created: 2024-04-28
-updated: 2026-01-29
+updated: 2026-08-23
 summary: "Les concepts fondamentaux du Domain-Driven Design — langage ubiquitaire, value objects, entités, agrégats et bounded contexts — avec des exemples concrets."
 draft: false
+related: [event-storming-color-code, introduction-cqrs, integration-events-vs-domain-events, ports-et-adapters]
 ---
 
 # Introduction au DDD

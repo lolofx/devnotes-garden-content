@@ -1,11 +1,14 @@
 ---
 title: "BFF, SignalR et Gateway — Arbitrages d'architecture"
 slug: bff-signalr-gateway-arbitrage
-tags: [bff, signalr, websocket, gateway, apim, architecture, dotnet, angular]
+tags: [bff, gateway, signalr]
+pillar: craft
+level: avance
 created: 2026-05-12
-updated: 2026-05-29
+updated: 2026-08-23
 summary: "Quand utiliser un BFF quand on a déjà une API Gateway, et comment intégrer SignalR sans tomber dans le god-service — arbitrages concrets et architectures cibles."
 draft: false
+related: [bff-clean-archi]
 ---
 
 # BFF, SignalR et Gateway — Arbitrages d'architecture
