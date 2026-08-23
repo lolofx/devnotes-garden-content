@@ -1,5 +1,5 @@
 ---
-status: pending
+status: implemented
 ---
 
 # Instruction: Génération de /llms.txt côté app

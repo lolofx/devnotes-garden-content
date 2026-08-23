@@ -1,5 +1,5 @@
 ---
-status: pending
+status: implemented
 ---
 
 # Instruction: Squelette de taxonomie du pilier IA

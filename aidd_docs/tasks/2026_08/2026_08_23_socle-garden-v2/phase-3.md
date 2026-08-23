@@ -1,5 +1,5 @@
 ---
-status: pending
+status: implemented
 ---
 
 # Instruction: Script d'audit du garden

@@ -1,6 +1,6 @@
 ---
 objective: "Le garden dispose d'un socle de conventions v2 (taxonomie 2 piliers, frontmatter enrichi, politique de tags, 3 formes de note, capsule agent), d'une source de vérité unique, d'un audit automatisé, et expose un /llms.txt consommable par un agent."
-status: in-progress
+status: implemented
 ---
 
 # Plan: Socle v2 du digital garden
