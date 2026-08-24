@@ -49,6 +49,8 @@ notes/
   bff/             → Backend For Frontend, composition, gateway, temps réel
   event-storming/  → ateliers, niveaux Big Picture / Process / Design, code couleur
   messaging/       → outbox, inbox, idempotence, fiabilité de la livraison
+  vcs/             → stratégies de branches, GitFlow, trunk-based, flux dev/QA,
+                     cycle de release, correction de bugs
   # pilier ai
   agents/          → fondamentaux ET fabrication : boucle agentique, contexte, mémoire,
                      outils, garde-fous, skill vs agent vs commande, évaluation
@@ -147,7 +149,7 @@ verified: 2026-08-23
 
 ### Vocabulaire de domaine
 
-`ddd` · `cqrs` · `hexagonal` · `bff` · `event-storming` · `messaging` · `dotnet` · `testing` · `infrastructure` · `agents` · `orchestration` · `aidd`
+`ddd` · `cqrs` · `hexagonal` · `bff` · `event-storming` · `messaging` · `vcs` · `dotnet` · `testing` · `infrastructure` · `agents` · `orchestration` · `aidd`
 
 Le **1er tag** est obligatoirement celui du dossier : il ancre la note.
 
@@ -155,7 +157,7 @@ Un **2e** tag de domaine n'est autorisé que pour une vraie **note-pont**, celle
 
 ### Vocabulaire transverse (0 à 4)
 
-`clean-architecture` · `composition` · `read-model` · `integration-events` · `domain-events` · `modeling` · `workshop` · `api` · `graphql` · `gateway` · `signalr` · `idempotence` · `reliability` · `microservices` · `tdd` · `memoire` · `contexte` · `prompt` · `evaluation` · `mcp` · `skill`
+`clean-architecture` · `composition` · `read-model` · `integration-events` · `domain-events` · `modeling` · `workshop` · `api` · `graphql` · `gateway` · `signalr` · `idempotence` · `reliability` · `microservices` · `gitflow` · `trunk-based` · `qa` · `tdd` · `memoire` · `contexte` · `prompt` · `evaluation` · `mcp` · `skill`
 
 ### Tag banni
 
@@ -234,6 +236,8 @@ Intro : le résultat visé, en une phrase observable
 ```
 
 La recette est la seule forme qui porte `verified:`. C'est aussi la seule qui a le droit de citer une version d'outil, un flag CLI ou un chemin de fichier — **une note concept n'en cite jamais**, sinon elle pourrit avec l'outillage.
+
+> **Exception étroite** — une note dont le sujet *est* une commande, comme celles du dossier `vcs/`, cite les commandes et leurs options : les en retirer viderait la note. La ligne rouge reste le **numéro de version** — `git switch` oui, « depuis git 2.23 » non.
 
 ### Quelle forme choisir
 

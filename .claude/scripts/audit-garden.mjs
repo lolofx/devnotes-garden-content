@@ -17,12 +17,13 @@ const NOTES_DIR = 'notes';
 
 const DOMAIN_TAGS = new Set([
   'ddd', 'cqrs', 'hexagonal', 'bff', 'event-storming', 'messaging',
-  'dotnet', 'testing', 'infrastructure', 'agents', 'orchestration', 'aidd',
+  'dotnet', 'testing', 'infrastructure', 'vcs', 'agents', 'orchestration', 'aidd',
 ]);
 const TRANSVERSE_TAGS = new Set([
   'clean-architecture', 'composition', 'read-model', 'integration-events', 'domain-events',
   'modeling', 'workshop', 'api', 'graphql', 'gateway', 'signalr',
   'idempotence', 'reliability', 'microservices',
+  'gitflow', 'trunk-based', 'qa',
   'tdd', 'memoire', 'contexte', 'prompt', 'evaluation', 'mcp', 'skill',
 ]);
 const BANNED_TAGS = new Set(['architecture']);
